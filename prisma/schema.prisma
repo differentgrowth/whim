@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Customer {
+  id    String @id @unique @default(uuid())
+  email String @unique
+  Url   Url[]
+}
+
+model Url {
+  id          Int       @id @unique @default(autoincrement())
+  created_at  DateTime  @default(now())
+  name        String?
+  url         String
+  shorted_url String    @unique
+  customer_id String?
+  counter     Int       @default(0)
+  Customer    Customer? @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+}
