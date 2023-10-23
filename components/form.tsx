@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 // @ts-expect-error
 import { experimental_useFormState as useFormState } from 'react-dom';
 import { redirect } from 'next/navigation';
@@ -17,16 +16,6 @@ type Props = {
 
 export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
   const [ state, formAction ] = useFormState( createAnonymous, { error: null } );
-  const [ whim, setWhim ] = useState<null | string>( null );
-
-  useEffect( () => {
-    if ( !state.shorted_url ) {
-      return;
-    }
-
-    const url = new URL( state.shorted_url, location.origin );
-    setWhim( url.host + url.pathname );
-  }, [ state ] );
 
   return (
     <>
@@ -41,12 +30,12 @@ export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
 
       { !!state.error
         ? <span className="mt-4 text-destructive">{ state.error }</span>
-        : !!whim
+        : !!state.shorted_url
           ? (
             <Card className="w-full max-w-2xl rounded-sm">
               <CopyWhim whimUrl={ state.shorted_url } />
               <span className="ml-2 text-muted-foreground">
-                { whim }
+                { `whim.li/${ state.shorted_url }` }
               </span>
             </Card>
           )

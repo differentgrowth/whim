@@ -77,7 +77,6 @@ export const signin = async ( prevState: any, formData: FormData ) => {
       const { data, error } = await signIn( { email, password } );
 
       if ( error || !data.user?.user_metadata.customer_id ) {
-        console.error( error );
         return {
           error: 'This user is not available!'
         };

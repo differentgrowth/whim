@@ -13,8 +13,7 @@ type Props = {
 export const CopyWhim = ( { whimUrl }: Props ) => {
   const [ isCopied, setIsCopied ] = useState( false );
   const onClick = async () => {
-    const url = new URL( whimUrl, location.origin );
-    const blob = new Blob( [ url.host + url.pathname ], { type: 'text/plain' } );
+    const blob = new Blob( [ `whim.li/${ whimUrl }` ], { type: 'text/plain' } );
     const data = [ new ClipboardItem( { [ 'text/plain' ]: blob } ) ];
 
     try {
