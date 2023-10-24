@@ -1,12 +1,13 @@
 import Link from 'next/link';
 
-import { CreateAnonymousWhimForm } from '@/components/form';
+import { Link1Icon } from '@radix-ui/react-icons';
+
 import { Input } from '@/components/ui/input';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/submit-button';
 import { buttonVariants } from '@/components/ui/button';
+import { CreateAnonymousWhimForm } from '@/components/form';
 import { cn } from '@/lib/utils';
-import { Link1Icon } from '@radix-ui/react-icons';
 
 const Page = () => {
 
@@ -47,7 +48,7 @@ const Page = () => {
         <div className="container w-full max-w-2xl flex flex-col gap-4 px-4 md:px-6">
           <CreateAnonymousWhimForm className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
             <Input
-              className="w-full max-w-lg flex-1 rounded-sm"
+              className="w-full max-w-lg flex-1 rounded-sm text-lg sm:text-base"
               placeholder="Enter a long URL"
               type="url"
               name="url"
