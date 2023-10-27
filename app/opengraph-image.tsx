@@ -15,7 +15,7 @@ export const contentType = 'image/png';
 // Image generation
 const Image = async () => {
   const interSemiBold = fetch(
-    new URL('./Inter-SemiBold.ttf', import.meta.url)
+    new URL('./Geist-SemiBold.otf', import.meta.url)
   ).then((res) => res.arrayBuffer())
 
   return new ImageResponse(

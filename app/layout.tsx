@@ -1,9 +1,7 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { GeistSans } from 'geist/font';
 
 import './globals.css';
-
-const inter = Inter( { subsets: [ 'latin' ] } );
 
 export const metadata: Metadata = {
   title: 'Whim',
@@ -13,7 +11,6 @@ export const metadata: Metadata = {
   referrer: 'origin-when-cross-origin',
   keywords: [ 'URl shortener' ],
   authors: [ { name: 'Alejandro RG', url: 'https://www.differentgrowth.com' } ],
-  colorScheme: 'light',
   creator: 'Different Growth',
   publisher: 'Different Growth',
   formatDetection: {
@@ -24,10 +21,21 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.whim.li')
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  colorScheme: 'light',
+  themeColor: '#fafaf9'
+}
+
 const RootLayout = ( { children }: { children: React.ReactNode } ) => {
   return (
-    <html lang="en">
-    <body className={ inter.className }>
+    <html
+      lang="en"
+      className={ GeistSans.className }
+    >
+    <body>
     { children }
     </body>
     </html>
