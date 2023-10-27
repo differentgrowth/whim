@@ -1,4 +1,4 @@
-import { ImageResponse } from 'next/server';
+import { ImageResponse } from 'next/og'
 
 // Route segment config
 export const runtime = 'edge';
@@ -14,6 +14,9 @@ export const contentType = 'image/png';
 
 // Image generation
 const Image = async () => {
+  const interSemiBold = fetch(
+    new URL('./Inter-SemiBold.ttf', import.meta.url)
+  ).then((res) => res.arrayBuffer())
 
   return new ImageResponse(
     (
@@ -37,7 +40,15 @@ const Image = async () => {
     {
       // For convenience, we can re-use the exported opengraph-image
       // size config to also set the ImageResponse's width and height.
-      ...size
+      ...size,
+      fonts: [
+        {
+          name: 'Inter',
+          data: await interSemiBold,
+          style: 'normal',
+          weight: 400,
+        },
+      ],
     }
   );
 };

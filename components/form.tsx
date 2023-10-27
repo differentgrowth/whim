@@ -1,7 +1,6 @@
 'use client';
 
-// @ts-expect-error
-import { experimental_useFormState as useFormState } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { redirect } from 'next/navigation';
 
 import { createAnonymous, signin, signup } from '@/app/actions';
