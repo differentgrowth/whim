@@ -1,6 +1,3 @@
-import { revalidatePath } from 'next/cache';
-
-import { z } from 'zod';
 import { ChevronRightIcon, ResetIcon } from '@radix-ui/react-icons';
 
 import { WhimTable } from '@/components/whim-table';
@@ -8,8 +5,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/submit-button';
-import { createWhim } from '@/lib/db';
 import { Button } from '@/components/ui/button';
+import { CreateWhimForm } from '@/components/form';
 
 type PageProps = {
   params: {
@@ -18,55 +15,22 @@ type PageProps = {
   searchParams: {};
 }
 
-const schema = z.object( {
-  url: z.string()
-        .url(),
-  name: z.string()
-         .nullable()
-} );
-
-
 const Page = async ( { params: { customer_id } }: PageProps ) => {
-  const create = async ( formData: FormData ) => {
-    'use server';
-    try {
-      const entries = Object.fromEntries( formData.entries() ) as z.infer<typeof schema>;
-
-      const parsed = schema.safeParse( entries );
-
-      if ( !parsed.success ) {
-        return {
-          error: 'Invalid data!'
-        };
-      }
-      if ( parsed.success ) {
-        const { url, name } = schema.parse( entries );
-        await createWhim( { customerId: customer_id, url, name } );
-
-        revalidatePath( `/dashboard/${ customer_id }`, 'page' );
-      }
-    } catch ( e ) {
-      return {
-        error: 'Oops! Something went wrong.'
-      };
-    }
-  };
-
-
   return (
     <main>
-      <form
-        action={ create }
-        className="w-full max-w-lg"
-        noValidate
-        spellCheck={ false }
-      >
+      <CreateWhimForm className="w-full max-w-lg">
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Create your new Whim</CardTitle>
           </CardHeader>
 
           <CardContent className="mt-2 flex flex-col gap-4">
+            <input
+              type="hidden"
+              value={ customer_id }
+              id="customer_id"
+              name="customer_id"
+            />
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -100,7 +64,7 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
             </SubmitButton>
           </CardFooter>
         </Card>
-      </form>
+      </CreateWhimForm>
 
       <WhimTable customerId={ customer_id } />
     </main>

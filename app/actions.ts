@@ -1,8 +1,11 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
 import { z } from 'zod';
 
-import { createAnonymousWhim, createCustomer, getCustomer } from '@/lib/db';
+import { createAnonymousWhim, createCustomer, createWhim, getCustomer } from '@/lib/db';
 import { signIn, signUp } from '@/lib/auth';
 
 const anonymousWhimSchema = z.object( {
@@ -23,7 +26,18 @@ const signUpSchema = z.object( {
              .min( 8 )
 } );
 
-export const createAnonymous = async ( prevState: any, formData: FormData ) => {
+const schema = z.object( {
+  customer_id: z.string(),
+  url: z.string()
+        .url(),
+  name: z.string()
+         .nullable()
+} );
+
+export const createAnonymous = async ( _prevState: {
+  error: string | null,
+  shorted_url: string | null
+}, formData: FormData ) => {
   try {
     const entries = Object.fromEntries( formData.entries() ) as z.infer<typeof anonymousWhimSchema>;
 
@@ -31,14 +45,13 @@ export const createAnonymous = async ( prevState: any, formData: FormData ) => {
 
     if ( !parsed.success ) {
       return {
-        error: 'Invalid url!'
+        error: 'Invalid url!',
+        shorted_url: null
       };
     }
 
-    const { url } = anonymousWhimSchema.parse( entries );
-
     if ( parsed.success ) {
-      const { shorted_url } = await createAnonymousWhim( { url } );
+      const { shorted_url } = await createAnonymousWhim( { url: parsed.data.url } );
 
       return {
         error: null,
@@ -47,12 +60,16 @@ export const createAnonymous = async ( prevState: any, formData: FormData ) => {
     }
   } catch ( e ) {
     return {
-      error: 'Oops! Something went wrong.'
+      error: 'Oops! Something went wrong.',
+      shorted_url: null
     };
   }
 };
 
-export const signin = async ( prevState: any, formData: FormData ) => {
+export const signin = async ( _prevState: {
+  error: string | null,
+  redirect: string | null
+}, formData: FormData ) => {
   try {
     const entries = Object.fromEntries( formData.entries() ) as z.infer<typeof signInSchema>;
 
@@ -60,42 +77,52 @@ export const signin = async ( prevState: any, formData: FormData ) => {
 
     if ( !parsed.success ) {
       return {
-        error: 'Invalid data!'
+        error: 'Invalid data!',
+        redirect: null
       };
     }
 
     if ( parsed.success ) {
-      const { email, password } = signInSchema.parse( entries );
-      const exists = await getCustomer( { email } );
+      const exists = await getCustomer( { email: parsed.data.email } );
 
       if ( !exists ) {
         return {
-          error: 'This user is not registered!'
+          error: 'This user is not registered!',
+          redirect: null
         };
       }
 
-      const { data, error } = await signIn( { email, password } );
+      const { data, error } = await signIn( {
+        email: parsed.data.email,
+        password: parsed.data.password
+      } );
 
       if ( error || !data.user?.user_metadata.customer_id ) {
         return {
-          error: 'This user is not available!'
+          error: 'This user is not available!',
+          redirect: null
         };
       }
 
       if ( !error && data.user?.user_metadata.customer_id ) {
         return {
+          error: null,
           redirect: `/dashboard/${ data.user.user_metadata.customer_id }`
         };
       }
     }
   } catch ( e ) {
     return {
-      error: 'Oops! Something went wrong.'
+      error: 'Oops! Something went wrong.',
+      redirect: null
     };
   }
 };
 
-export const signup = async ( prevState: any, formData: FormData ) => {
+export const signup = async ( _prevState: {
+  error: string | null,
+  redirect: string | null
+}, formData: FormData ) => {
   try {
     const entries = Object.fromEntries( formData.entries() ) as z.infer<typeof signUpSchema>;
 
@@ -103,36 +130,78 @@ export const signup = async ( prevState: any, formData: FormData ) => {
 
     if ( !parsed.success ) {
       return {
-        error: 'Invalid data!'
+        error: 'Invalid data!',
+        redirect: null
       };
     }
 
     if ( parsed.success ) {
-      const { email, password } = signUpSchema.parse( entries );
-      const customer = await createCustomer( { email } );
+      const customer = await createCustomer( { email: parsed.data.email } );
 
       if ( !customer ) {
         return {
-          error: 'Imposible create user right now! Try again later.'
+          error: 'Imposible create user right now! Try again later.',
+          redirect: null
         };
       }
 
-      const { data: { user }, error } = await signUp( { email, password, customer_id: customer.id } );
+      const { data: { user }, error } = await signUp( {
+        email: parsed.data.email,
+        password: parsed.data.password,
+        customer_id: customer.id
+      } );
       if ( error || !user?.user_metadata.customer_id ) {
         return {
-          error: 'Imposible sign up right now! Try again later.'
+          error: 'Imposible sign up right now! Try again later.',
+          redirect: null
         };
       }
 
-      await signIn( { email, password } );
+      await signIn( {
+        email: parsed.data.email,
+        password: parsed.data.password
+      } );
 
+      redirect(`/dashboard/${ customer.id }`)
       return {
+        error: null,
         redirect: `/dashboard/${ customer.id }`
       };
     }
   } catch ( e ) {
     return {
-      error: 'Oops! Something went wrong.'
+      error: 'Oops! Something went wrong.',
+      redirect: null
+    };
+  }
+};
+
+export const create = async ( _prevState: { error: string | null; }, formData: FormData ) => {
+  try {
+    const entries = Object.fromEntries( formData.entries() ) as z.infer<typeof schema>;
+
+    const parsed = schema.safeParse( entries );
+
+    if ( !parsed.success ) {
+      return {
+        error: 'Invalid data!',
+      };
+    }
+    if ( parsed.success ) {
+      await createWhim( {
+        customerId: parsed.data.customer_id,
+        url: parsed.data.url,
+        name: parsed.data.name
+      } );
+
+      revalidatePath( `/dashboard/${ parsed.data.customer_id }`, 'page' );
+      return {
+        error: null,
+      };
+    }
+  } catch ( e ) {
+    return {
+      error: 'Oops! Something went wrong.',
     };
   }
 };
