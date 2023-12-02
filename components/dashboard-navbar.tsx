@@ -1,10 +1,11 @@
 import { ExitIcon } from '@radix-ui/react-icons';
+
 import { SubmitButton } from "@/components/submit-button";
 import { signOut } from "@/auth";
 
 export const DashboardNavbar = () => {
     return (
-        <nav className="flex flex-row flex-wrap justify-end items-center py-4 px-2">
+        <nav className="flex flex-row flex-wrap justify-end items-center p-2 mt-1.5">
             <form
                 action={ async () => {
                     'use server';

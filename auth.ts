@@ -1,53 +1,63 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import { authConfig } from './auth.config';
-import { getCustomer } from '@/lib/db';
+import { createCustomer, getCustomer } from '@/lib/db';
 
 export const {
-    auth,
-    signIn,
-    signOut
+  auth,
+  signIn,
+  signOut
 } = NextAuth(
-    {
-        ...authConfig,
-        providers: [
-            Credentials(
-                {
-                    async authorize( credentials ) {
-                        const parsedCredentials = z
-                            .object( {
-                                         email: z.string()
-                                                 .email(),
-                                         password: z.string()
-                                                    .min( 8 )
-                                     } )
-                            .safeParse( credentials );
+  {
+    ...authConfig,
+    providers: [
+      Credentials(
+        {
+          async authorize( credentials ) {
+            const parsedCredentials = z
+              .object( {
+                         email: z.string()
+                                 .email(),
+                         password: z.string()
+                                    .min( 8 )
+                       } )
+              .safeParse( credentials );
 
-                        if ( parsedCredentials.success ) {
-                            const {
-                                email,
-                                password
-                            } = parsedCredentials.data;
-                            const customer = await getCustomer( { email } );
-                            if ( !customer || !customer.password ) {
-                                return null;
-                            }
+            if ( parsedCredentials.success ) {
+              const {
+                email,
+                password
+              } = parsedCredentials.data;
+              let customer = await getCustomer( { email } );
 
-                            const passwordsMatch = await compare( password, customer.password );
-                            if ( passwordsMatch ) {
-                                return {
-                                    id: customer.id,
-                                    name: customer.id,
-                                    email: customer.email
-                                }
-                            }
-                        }
+              if ( !customer ) {
+                const encryptPassword = await hash( password, 10 );
+                customer = await createCustomer( { email, password: encryptPassword } );
 
-                        return null;
-                    }
-                } )
-        ]
-    } );
+                if ( !customer ) return null;
+
+                return {
+                  id: customer.id,
+                  name: customer.id,
+                  email: customer.email
+                };
+              }
+
+              const passwordsMatch = await compare( password, customer.password );
+              if ( passwordsMatch ) {
+                return {
+                  id: customer.id,
+                  name: customer.id,
+                  email: customer.email
+                };
+              }
+            }
+
+            return null;
+          }
+        } )
+    ]
+  } );
