@@ -32,7 +32,7 @@ export const Navbar = () => {
             className="flex flex-row justify-center items-center"
           >
             <HomeIcon className="mr-1.5 w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-semibold">WHIM</span>
+            <span className="hidden sm:inline text-sm font-medium">WHIM</span>
           </Link>
         )
         : null }
@@ -41,12 +41,12 @@ export const Navbar = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
-              href="/signin"
+              href="/login"
               legacyBehavior
               passHref
             >
               <NavigationMenuLink className={ navigationMenuTriggerStyle() }>
-                Sign In
+                Log In
                 <EnterIcon className="ml-1.5 w-4 h-4" />
               </NavigationMenuLink>
             </Link>

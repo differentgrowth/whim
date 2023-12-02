@@ -2,21 +2,23 @@ import Link from 'next/link';
 
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 
-import { SignupForm } from '@/components/forms';
+import { AuthenticateForm } from '@/components/forms';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/submit-button';
 import { buttonVariants } from '@/components/ui/button';
 
-const Page = () => {
+const Page = async () => {
     return (
         <main>
-            <SignupForm className="w-full max-w-lg">
+            <AuthenticateForm className="w-full max-w-lg">
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Create your account</CardTitle>
-                        <CardDescription>Share your new urls in one-click.</CardDescription>
+                        <CardTitle>Shorten Your URL in Seconds!</CardTitle>
+                        <CardDescription>
+                            Welcome to the quickest and easiest way to shorten your URLs.
+                        </CardDescription>
                     </CardHeader>
 
                     <CardContent className="mt-2 flex flex-col gap-4">
@@ -36,7 +38,7 @@ const Page = () => {
                                 id="password"
                                 name="password"
                                 type="password"
-                                autoComplete="new-password"
+                                autoComplete="password"
                                 placeholder="***"
                             />
                         </div>
@@ -44,16 +46,17 @@ const Page = () => {
 
                     <CardFooter className="flex justify-end gap-1.5">
                         <Link
-                            href="/login"
+                            href="/signup"
                             className={ buttonVariants( { variant: 'outline' } ) }
                         >
-                            Switch to Log In
+                            Switch to Sign Up
                             <ArrowRightIcon className="ml-1.5 w-4 h-4" />
                         </Link>
-                        <SubmitButton>Register</SubmitButton>
+
+                        <SubmitButton>Enter</SubmitButton>
                     </CardFooter>
                 </Card>
-            </SignupForm>
+            </AuthenticateForm>
         </main>
     );
 };
