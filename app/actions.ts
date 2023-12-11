@@ -73,18 +73,16 @@ export const create = async ( _prevState: CreateInitialState, formData: FormData
         error: 'Invalid data!'
       };
     }
-    if ( parsed.success ) {
-      await createWhim( {
-                          customerId: parsed.data.customer_id,
-                          url: parsed.data.url,
-                          name: parsed.data.name
-                        } );
+    await createWhim( {
+                        customerId: parsed.data.customer_id,
+                        url: parsed.data.url,
+                        name: parsed.data.name
+                      } );
 
-      revalidatePath( `/dashboard/${ parsed.data.customer_id }`, 'page' );
-      return {
-        error: null
-      };
-    }
+    revalidatePath( `/dashboard/${ parsed.data.customer_id }`, 'page' );
+    return {
+      error: null
+    };
   } catch ( e ) {
     return {
       error: 'Oops! Something went wrong.'
