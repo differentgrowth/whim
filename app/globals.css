@@ -92,12 +92,11 @@
     }
 
     body {
-        @apply bg-background text-foreground;
-        @apply flex flex-col gap-y-12 min-h-[100svh];
+        @apply bg-background text-foreground flex flex-col min-h-[100svh];
     }
 
     main {
-        @apply px-2 mb-12 grow flex flex-col items-center;
+        @apply px-2 mb-12 grow;
     }
 
     h1 {

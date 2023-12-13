@@ -1,16 +1,22 @@
-import { HeartFilledIcon } from '@radix-ui/react-icons';
-import { buttonVariants } from '@/components/ui/button';
+import { HeartIcon } from "@radix-ui/react-icons";
+
+import { buttonVariants } from "@/components/ui/button";
 
 export const Footer = () => {
   return (
-    <footer className="fixed bottom-0 inset-x-0 flex flex-col gap-4 p-2">
-      <div className="flex justify-end">
+    <footer className="mt-34 md:mt-36 border-t">
+      <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+        <p className="mt-10 text-center">
+          &copy; { new Date().getFullYear() } Different Growth.
+        </p>
+      </div>
+
+      <div className="p-2 flex flex-row justify-end items-end">
         <a
           href="https://www.differentgrowth.com"
-          className={ buttonVariants( { variant: 'link', size: 'sm' } ) }
-          target="_blank"
+          className={ buttonVariants( { variant: 'link' } ) }
         >
-          Made by Different Growth with love <HeartFilledIcon className="ml-1 w-4 h-4" />
+          Designed by DifferentGrowth with <HeartIcon className="ml-1.5 h-4 w-4" />
         </a>
       </div>
     </footer>
