@@ -8,7 +8,9 @@ type Props = {
   customerId: string;
 }
 
-const getData = async ( { customerId }: { customerId: string } ) => {
+const getData = async ( { customerId }: {
+  customerId: string
+} ) => {
   const whims = await getCustomerWhims( { customer_id: customerId } );
 
   return {

@@ -1,11 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect, RedirectType } from "next/navigation";
 
 import { z } from 'zod';
 
 import { createAnonymousWhim, createWhim } from '@/lib/db';
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AnonymousInitialState, AuthenticateInitialState, CreateInitialState } from "@/interfaces/actions";
 
 const anonymousWhimSchema = z.object( {
@@ -51,7 +52,8 @@ export const createAnonymous = async ( _prevState: AnonymousInitialState, formDa
 
 export const authenticate = async ( _prevState: AuthenticateInitialState, formData: FormData ) => {
   try {
-    await signIn( 'credentials', formData );
+    const { email, password } = Object.fromEntries( formData.entries() );
+    await signIn( 'credentials', { email, password, redirect: false } );
   } catch ( error: any ) {
     if ( error.type === 'CredentialsSignin' ) {
       return {
@@ -60,6 +62,7 @@ export const authenticate = async ( _prevState: AuthenticateInitialState, formDa
     }
     throw error;
   }
+  redirect( `/login`, RedirectType.replace );
 };
 
 export const create = async ( _prevState: CreateInitialState, formData: FormData ) => {
@@ -88,4 +91,13 @@ export const create = async ( _prevState: CreateInitialState, formData: FormData
       error: 'Oops! Something went wrong.'
     };
   }
+};
+
+export const signout = async () => {
+  try {
+    await signOut( { redirect: false } );
+  } catch ( e ) {
+    console.log( e );
+  }
+  redirect( `/`, RedirectType.replace );
 };

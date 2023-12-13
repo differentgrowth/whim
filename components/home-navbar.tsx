@@ -32,7 +32,7 @@ export const Navbar = () => {
             className="flex flex-row justify-center items-center"
           >
             <HomeIcon className="mr-1.5 w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-medium">WHIM</span>
+            <span className="hidden sm:inline text-sm font-medium">Whim</span>
           </Link>
         )
         : null }

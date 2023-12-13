@@ -2,31 +2,37 @@
 
 import { useFormStatus } from 'react-dom';
 
-import { ArrowTopRightIcon, ReloadIcon } from '@radix-ui/react-icons';
+import { ArrowRightIcon, ReloadIcon } from '@radix-ui/react-icons';
 
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { cn } from "@/lib/utils";
 
-type Props = {
-    className?: string;
-    icon?: React.ReactNode
-    children: React.ReactNode;
+type Props =
+  ButtonProps
+  & {
+  icon?: React.ReactNode
 }
 
-export const SubmitButton = ( { className, children, icon }: Props ) => {
-    const { pending } = useFormStatus();
+export const SubmitButton = ( { className, children, icon, ...props }: Props ) => {
+  const { pending } = useFormStatus();
 
-    return (
-        <Button
-            className={ className }
-            type="submit"
-            aria-disabled={ pending }
-        >
-            { children }
+  return (
+    <Button
+      { ...props }
+      className={ cn(
+        '[&>svg]:w-4 [&>svg]:h-4',
+        props.size !== 'icon' && '[&>svg]:ml-1.5',
+        className
+      ) }
+      type="submit"
+      aria-disabled={ pending }
+    >
+      { children }
 
-            { pending
-              ? <ReloadIcon className="ml-1.5 w-4 h-4 animate-spin" />
-              : icon || <ArrowTopRightIcon className="ml-1.5 w-4 h-4" />
-            }
-        </Button>
-    );
+      { pending
+        ? <ReloadIcon className="animate-spin" />
+        : icon || <ArrowRightIcon />
+      }
+    </Button>
+  );
 };
