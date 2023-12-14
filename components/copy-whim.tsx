@@ -12,14 +12,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-type Props = {
+type Props =
+  ButtonProps
+  & {
   whimUrl: string;
 }
 
-export const CopyWhim = ( { whimUrl }: Props ) => {
+export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
   const { toast } = useToast();
   const [ isCopied, setIsCopied ] = useState( false );
   const handleCopy = async ( whim: string ) => {
@@ -49,10 +51,10 @@ export const CopyWhim = ( { whimUrl }: Props ) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          size="icon"
-          variant="ghost"
+          variant={ variant }
+          { ...props }
         >
-          <CopyIcon className="w-4 h-4" />
+          <CopyIcon className="w-4 h-4 shrink-0" />
           <span className="sr-only">Copy Menu</span>
         </Button>
       </DropdownMenuTrigger>
@@ -65,7 +67,8 @@ export const CopyWhim = ( { whimUrl }: Props ) => {
             handleCopy( `https://whim.li/${ whimUrl }` );
             toast( {
                      title: "Whim copied with link style",
-                     description: `https://whim.li/${ whimUrl }`
+                     description: `https://whim.li/${ whimUrl }`,
+                     className: "bg-muted"
                    } );
           } }
         >
@@ -81,7 +84,8 @@ export const CopyWhim = ( { whimUrl }: Props ) => {
             handleCopy( `whim.li/${ whimUrl }` );
             toast( {
                      title: "Whim copied with clean style",
-                     description: `whim.li/${ whimUrl }`
+                     description: `whim.li/${ whimUrl }`,
+                     className: "bg-muted"
                    } );
           } }
         >

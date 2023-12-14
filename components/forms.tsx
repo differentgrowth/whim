@@ -35,12 +35,17 @@ export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
         ? <span className="mt-4 text-destructive">{ state.error }</span>
         : !!state?.shorted_url
           ? (
-            <Card className="w-full max-w-2xl rounded-sm">
-              <CopyWhim whimUrl={ state.shorted_url } />
-              <span className="ml-2 text-muted-foreground">
-                            { `whim.li/${ state.shorted_url }` }
-                        </span>
-            </Card>
+            <div className="w-full max-w-2xl flex flex-row items-center">
+              <p className="px-3 py-1 border text-muted-foreground grow rounded-sm">
+                { `whim.li/${ state.shorted_url }` }
+              </p>
+              <CopyWhim
+                size="icon"
+                variant="default"
+                className="ml-1.5 rounded-sm grow-0"
+                whimUrl={ state.shorted_url }
+              />
+            </div>
           )
           : null }
     </>

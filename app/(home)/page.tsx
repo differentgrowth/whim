@@ -45,19 +45,19 @@ const Page = () => {
       </section>
 
       <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container w-full max-w-2xl flex flex-col gap-4 px-4 md:px-6">
-          <CreateAnonymousWhimForm className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+        <div className="container w-full max-w-2xl flex flex-col space-y-3">
+          <CreateAnonymousWhimForm className="flex flex-row">
             <Input
-              className="w-full max-w-lg flex-1 rounded-sm text-lg sm:text-base"
+              className="grow w-full rounded-sm text-base font-light sm:text-sm"
               placeholder="Enter a long URL"
               type="url"
               name="url"
             />
             <SubmitButton
-              className="rounded-sm"
-              icon={ <Link1Icon className="ml-1.5 w-4 h-4" /> }
+              size="icon"
+              icon={ <Link1Icon /> }
+              className="ml-1.5 rounded-sm grow-0"
             >
-              Shorten URL
             </SubmitButton>
           </CreateAnonymousWhimForm>
         </div>

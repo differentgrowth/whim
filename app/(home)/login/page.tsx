@@ -14,7 +14,7 @@ type PageProps = {
 
 const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
   return (
-    <main>
+    <main className="flex justify-center mt-12">
       <Tabs
         defaultValue={ value }
         className="w-full max-w-lg"

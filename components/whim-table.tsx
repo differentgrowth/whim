@@ -31,8 +31,8 @@ export const WhimTable = async ( { customerId }: Props ) => {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px] text-right border-r">Actions</TableHead>
-          <TableHead>Name</TableHead>
           <TableHead>Whim URL</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead className="w-max">URL</TableHead>
           <TableHead className="text-right">Counter</TableHead>
           <TableHead className="text-right">Created At</TableHead>
@@ -44,20 +44,20 @@ export const WhimTable = async ( { customerId }: Props ) => {
             <TableCell
               className={ cn(
                 'border-r',
-                'flex flex-row flex-wrap justify-end items-center gap-1'
+                'flex flex-row items-center space-x-1.5'
               ) }
             >
               <DeleteWhim
                 whimId={ whim.id }
                 customerId={ customerId }
               />
-              <CopyWhim whimUrl={ whim.shorted_url } />
+              <CopyWhim size="icon" whimUrl={ whim.shorted_url } />
             </TableCell>
+            <TableCell className="w-24">{ whim.shorted_url }</TableCell>
             <TableCell className="font-medium">{ whim.name }</TableCell>
-            <TableCell>{ whim.shorted_url }</TableCell>
             <TableCell className="truncate w-max">{ whim.url }</TableCell>
-            <TableCell className="text-right">{ whim.counter }</TableCell>
-            <TableCell className="text-right">{ whim.created_at.toLocaleString() }</TableCell>
+            <TableCell className="text-right w-24">{ whim.counter }</TableCell>
+            <TableCell className="text-right w-52">{ whim.created_at.toLocaleString() }</TableCell>
           </TableRow>
         ) ) }
       </TableBody>

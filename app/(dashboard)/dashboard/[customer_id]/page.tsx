@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { ChevronRightIcon, ResetIcon } from '@radix-ui/react-icons';
 
 import { WhimTable } from '@/components/whim-table';
@@ -18,7 +20,7 @@ type PageProps = {
 const Page = async ( { params: { customer_id } }: PageProps ) => {
   return (
     <main>
-      <CreateWhimForm className="w-full max-w-lg">
+      <CreateWhimForm className="w-full max-w-lg mx-auto">
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Create your new Whim</CardTitle>
@@ -59,14 +61,16 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
               Reset
               <ResetIcon className="ml-1.5 w-4 h-4" />
             </Button>
-            <SubmitButton icon={ <ChevronRightIcon className="ml-1.5 w-4 h-4" /> }>
+            <SubmitButton icon={ <ChevronRightIcon /> }>
               Create
             </SubmitButton>
           </CardFooter>
         </Card>
       </CreateWhimForm>
 
-      <WhimTable customerId={ customer_id } />
+      <Suspense>
+        <WhimTable customerId={ customer_id } />
+      </Suspense>
     </main>
   );
 };

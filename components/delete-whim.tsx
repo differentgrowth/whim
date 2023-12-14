@@ -1,20 +1,18 @@
-import { revalidatePath } from 'next/cache';
-
 import { Cross1Icon, TrashIcon } from '@radix-ui/react-icons';
 
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog";
-import { deleteWhim } from '@/lib/db';
 import { SubmitButton } from "@/components/submit-button";
+import { deleteWhimAction } from "@/app/actions";
 
 type Props = {
   whimId: number;
@@ -22,16 +20,6 @@ type Props = {
 }
 
 export const DeleteWhim = ( { whimId, customerId }: Props ) => {
-  const action = async () => {
-    'use server';
-    try {
-      await deleteWhim( { whimId } );
-      revalidatePath( `/dashboard/${ customerId }` );
-    } catch ( e ) {
-      console.error( e );
-    }
-  };
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,7 +28,7 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
           variant="ghost"
         >
           <TrashIcon className="w-4 h-4" />
-          <span className="sr-only">Remove Modal</span>
+          <span className="sr-only">Remove Whim</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -61,10 +49,12 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
             </Button>
           </DialogClose>
           <form
-            action={ action }
+            action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
             noValidate
           >
-            <SubmitButton icon={ <TrashIcon className="ml-1.5 w-4 h-4" /> }>Delete</SubmitButton>
+            <SubmitButton icon={ <TrashIcon /> }>
+              Delete
+            </SubmitButton>
           </form>
         </DialogFooter>
       </DialogContent>
