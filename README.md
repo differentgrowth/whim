@@ -1,11 +1,11 @@
-# Whim
+# whim.li
 
-An url shortener.
+Simple url shortener.
 
 ---
 
 * NextJS
-* Supabase
+* Vercel storage
 * Prisma
 * ShadcnUI
 * Tailwind
