@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect, RedirectType } from "next/navigation";
 
 import { z } from 'zod';
+import { compareAsc } from "date-fns";
 
 import { createAnonymousWhim, createWhim, deleteWhim } from '@/lib/db';
 import { signIn, signOut } from '@/auth';
@@ -40,14 +41,26 @@ const createSchema = z.object(
     url: z.string()
           .url(),
     name: z.string()
-           .nullable()
+           .nullable(),
+    expiration: z.string()
+                 .transform( data => data === ''
+                                     ? null
+                                     : data )
+                 .refine( data => data === null || compareAsc( new Date( data ), new Date() ), {
+                   message: 'invalid date'
+                 } )
   }
 );
 
 export const create = async ( _prevState: CreateInitialState, formData: FormData ) => {
-  const parsed = createSchema.safeParse( Object.fromEntries( formData.entries() ) as z.infer<typeof createSchema> );
+  const parsed = createSchema.safeParse( Object.fromEntries( formData.entries() ) as unknown as z.infer<typeof createSchema> );
 
   if ( !parsed.success ) {
+    if ( parsed.error.errors[ 0 ].message === 'invalid date' ) {
+      return {
+        error: 'Invalid date!'
+      };
+    }
     return {
       error: 'Invalid data!'
     };
@@ -57,7 +70,8 @@ export const create = async ( _prevState: CreateInitialState, formData: FormData
     await createWhim( {
                         customerId: parsed.data.customer_id,
                         url: parsed.data.url,
-                        name: parsed.data.name
+                        name: parsed.data.name,
+                        expiration: parsed.data.expiration
                       } );
   } catch ( e ) {
     return {

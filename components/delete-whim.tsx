@@ -52,9 +52,11 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
             action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
             noValidate
           >
-            <SubmitButton icon={ <TrashIcon /> }>
-              Delete
-            </SubmitButton>
+            <DialogClose asChild>
+              <SubmitButton icon={ <TrashIcon /> }>
+                Delete
+              </SubmitButton>
+            </DialogClose>
           </form>
         </DialogFooter>
       </DialogContent>

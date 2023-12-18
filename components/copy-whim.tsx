@@ -18,8 +18,8 @@ import { useToast } from "@/components/ui/use-toast";
 type Props =
   ButtonProps
   & {
-  whimUrl: string;
-}
+    whimUrl: string;
+  }
 
 export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
   const { toast } = useToast();
@@ -64,10 +64,10 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
         <DropdownMenuItem
           onClick={ () => {
             setIsCopied( true );
-            handleCopy( `https://whim.li/${ whimUrl }` );
+            handleCopy( `${ location.origin }/${ whimUrl }` );
             toast( {
                      title: "Whim copied with link style",
-                     description: `https://whim.li/${ whimUrl }`,
+                     description: `${ location.origin }/${ whimUrl }`,
                      className: "bg-muted"
                    } );
           } }
@@ -81,10 +81,10 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
         <DropdownMenuItem
           onClick={ () => {
             setIsCopied( true );
-            handleCopy( `whim.li/${ whimUrl }` );
+            handleCopy( `${ location.host }/${ whimUrl }` );
             toast( {
                      title: "Whim copied with clean style",
-                     description: `whim.li/${ whimUrl }`,
+                     description: `${ location.host }/${ whimUrl }`,
                      className: "bg-muted"
                    } );
           } }

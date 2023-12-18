@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
 import { CreateWhimForm } from '@/components/forms';
+import { DatePicker } from "@/components/date-picker";
 
 type PageProps = {
   params: {
@@ -50,6 +51,10 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
                 type="url"
                 placeholder="https://"
               />
+            </div>
+            <div>
+              <Label htmlFor="expiration">Expiration Date (optional)</Label>
+              <DatePicker />
             </div>
           </CardContent>
 

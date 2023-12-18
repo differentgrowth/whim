@@ -70,7 +70,7 @@ export const CreateWhimForm = ( { className, children }: Props ) => {
         ? (
           <Card
             className={ cn(
-              'mt-4 p-4 w-full max-w-lg',
+              'mt-4 p-4 w-full max-w-lg mx-auto',
               'border-destructive bg-destructive/10'
             ) }
           >
@@ -101,7 +101,7 @@ export const AuthenticateForm = ( { className, children }: Props ) => {
         ? (
           <Card
             className={ cn(
-              'mt-4 p-4 w-full max-w-lg',
+              'mt-4 p-4 w-full max-w-lg mx-auto',
               'border-destructive bg-destructive/10'
             ) }
           >

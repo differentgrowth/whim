@@ -23,5 +23,6 @@ model Url {
   shorted_url String    @unique
   customer_id String?
   counter     Int       @default(0)
+  expiration  DateTime?
   Customer    Customer? @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 }

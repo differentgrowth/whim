@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/home-navbar';
+import { Navbar } from '@/components/navbar-home';
 import { Footer } from '@/components/footer';
 
 type LayoutProps = {

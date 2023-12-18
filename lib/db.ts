@@ -22,10 +22,11 @@ export const getCustomer = async ( { email }: {
   return prisma.customer.findUnique( { where: { email } } );
 };
 
-export const createWhim = async ( { customerId, url, name }: {
+export const createWhim = async ( { customerId, url, name, expiration }: {
   customerId: string;
   url: string;
   name: string | null;
+  expiration: string | null;
 } ) => {
   return prisma.url.create(
     {
@@ -35,14 +36,12 @@ export const createWhim = async ( { customerId, url, name }: {
         shorted_url: Math.random()
                          .toString( 36 )
                          .slice( 2, 8 ),
+        expiration,
         Customer: {
           connect: {
             id: customerId
           }
         }
-      },
-      include: {
-        Customer: true
       }
     }
   );
@@ -69,7 +68,10 @@ export const getWhim = async ( { shorted_url }: {
   return prisma.url.findFirst(
     {
       where: { shorted_url },
-      select: { url: true }
+      select: {
+        url: true,
+        expiration: true
+      }
     }
   );
 };

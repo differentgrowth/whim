@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 type Props =
   ButtonProps
   & {
-  icon?: React.ReactNode
-}
+    icon?: React.ReactNode
+  }
 
 export const SubmitButton = ( { className, children, icon, ...props }: Props ) => {
   const { pending } = useFormStatus();

@@ -23,8 +23,7 @@ const Page = () => {
               ) }
             >
               Transform long and cumbersome links into short, shareable URLs in a snap. Ideal for social
-              media posts,
-              emails, and more. Start simplifying your links now!
+              media posts, emails, and more. Start simplifying your links now!
             </p>
             <p
               className={ cn(
