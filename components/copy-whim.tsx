@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { CheckCircledIcon, CopyIcon, InputIcon, SliderIcon } from '@radix-ui/react-icons';
 
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Button, ButtonProps } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 type Props =
   ButtonProps
@@ -22,17 +22,9 @@ type Props =
   }
 
 export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
-  const { toast } = useToast();
   const [ isCopied, setIsCopied ] = useState( false );
   const handleCopy = async ( whim: string ) => {
-    const blob = new Blob( [ whim ], { type: 'text/plain' } );
-    const data = [ new ClipboardItem( { [ 'text/plain' ]: blob } ) ];
-
-    try {
-      await navigator.clipboard.write( data );
-    } catch ( e ) {
-      console.error( e );
-    }
+    navigator.clipboard.writeText( whim );
   };
 
   useEffect( () => {
@@ -65,11 +57,10 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.origin }/${ whimUrl }` );
-            toast( {
-                     title: "Whim copied with link style",
-                     description: `${ location.origin }/${ whimUrl }`,
-                     className: "bg-muted"
-                   } );
+            toast( 'Whim copied with link style.', {
+              description: `${ location.origin }/${ whimUrl }`,
+              className: "bg-muted"
+            } );
           } }
         >
           Link
@@ -82,11 +73,10 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.host }/${ whimUrl }` );
-            toast( {
-                     title: "Whim copied with clean style",
-                     description: `${ location.host }/${ whimUrl }`,
-                     className: "bg-muted"
-                   } );
+            toast( 'Whim copied with clean style', {
+              description: `${ location.host }/${ whimUrl }`,
+              className: "bg-muted"
+            } );
           } }
         >
           Clean

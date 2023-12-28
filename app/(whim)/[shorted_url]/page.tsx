@@ -1,7 +1,8 @@
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
+
+import { compareAsc } from "date-fns";
 
 import { getWhim, increaseWhimCounter } from '@/lib/db';
-import { compareAsc } from "date-fns";
 
 type PageProps = {
   params: {
@@ -36,11 +37,15 @@ const Page = async ( { params: { shorted_url } }: PageProps ) => {
     notFound();
   }
 
+  if ( !expiration ) {
+    permanentRedirect( url );
+  }
+
   if ( expiration && compareAsc( expiration, new Date() ) < 1 ) {
     permanentRedirect( '/expired' );
   }
 
-  permanentRedirect( url );
+  redirect( url );
 
   return null;
 };

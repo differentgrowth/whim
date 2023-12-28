@@ -68,7 +68,7 @@
 
 @layer base {
     ::-webkit-scrollbar-track {
-        @apply bg-transparent;
+        @apply bg-foreground/10;
     }
 
     ::-webkit-scrollbar-thumb {
@@ -92,7 +92,7 @@
     }
 
     body {
-        @apply bg-background text-foreground flex flex-col min-h-[100svh];
+        @apply bg-background text-foreground min-h-dvh flex flex-col;
     }
 
     main {
@@ -120,14 +120,10 @@
     }
 
     blockquote {
-        @apply mt-6 border-l-2 pl-6 italic
+        @apply mt-6 border-l-2 pl-6 italic;
     }
 
     ul {
-        @apply my-6 ml-6 list-disc [&>li]:mt-2;
-    }
-
-    code {
-        @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+        @apply my-6 list-none [&>li]:mt-2;
     }
 }

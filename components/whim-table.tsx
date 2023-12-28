@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { compareAsc, format } from "date-fns";
 
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CopyWhim } from '@/components/copy-whim';
@@ -64,9 +64,17 @@ export const WhimTable = async ( { customerId }: Props ) => {
             <TableCell className="truncate w-max">{ whim.url }</TableCell>
             <TableCell className="text-right w-24">{ whim.counter }</TableCell>
             <TableCell className="text-right w-52">{ format( whim.created_at, "LLL dd, y" ) }</TableCell>
-            <TableCell className="text-right w-52">{ whim.expiration
-                                                     ? format( whim.expiration, "LLL dd, y" )
-                                                     : '' }</TableCell>
+            <TableCell
+              className={ cn(
+                "text-right w-52",
+                ( whim.expiration && compareAsc( whim.expiration, new Date() ) < 0 )
+                && 'line-through'
+              ) }
+            >
+              { whim.expiration
+                ? format( whim.expiration, "LLL dd, y" )
+                : '' }
+            </TableCell>
           </TableRow>
         ) ) }
       </TableBody>

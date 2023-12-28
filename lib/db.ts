@@ -82,7 +82,10 @@ export const getCustomerWhims = async ( { customer_id }: {
   return prisma.url.findMany(
     {
       where: { customer_id },
-      orderBy: { created_at: 'desc' }
+      orderBy: [
+        { expiration: 'desc' },
+        { created_at: 'desc' }
+      ]
     }
   );
 };
