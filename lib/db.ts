@@ -22,11 +22,12 @@ export const getCustomer = async ( { email }: {
   return prisma.customer.findUnique( { where: { email } } );
 };
 
-export const createWhim = async ( { customerId, url, name, expiration }: {
+export const createWhim = async ( { customerId, url, name, expiration, password }: {
   customerId: string;
   url: string;
   name: string | null;
   expiration: string | null;
+  password: string | null;
 } ) => {
   return prisma.url.create(
     {
@@ -37,6 +38,7 @@ export const createWhim = async ( { customerId, url, name, expiration }: {
                          .toString( 36 )
                          .slice( 2, 8 ),
         expiration,
+        password,
         Customer: {
           connect: {
             id: customerId
@@ -65,12 +67,13 @@ export const createAnonymousWhim = async ( { url }: {
 export const getWhim = async ( { shorted_url }: {
   shorted_url: string
 } ) => {
-  return prisma.url.findFirst(
+  return prisma.url.findUnique(
     {
       where: { shorted_url },
       select: {
         url: true,
-        expiration: true
+        expiration: true,
+        password: true
       }
     }
   );
@@ -111,6 +114,20 @@ export const increaseWhimCounter = async ( { shorted_url }: {
     {
       where: { shorted_url },
       data: { counter: { increment: 1 } }
+    }
+  );
+};
+
+export const getWhimPassword = async ( { shorted_url }: {
+  shorted_url: string;
+} ) => {
+  return prisma.url.findUnique(
+    {
+      where: { shorted_url },
+      select: {
+        password: true,
+        url: true
+      }
     }
   );
 };

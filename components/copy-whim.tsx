@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { CheckCircledIcon, CopyIcon, InputIcon, SliderIcon } from '@radix-ui/react-icons';
+import { CheckCircledIcon, CopyIcon, DoubleArrowRightIcon, InputIcon, SliderIcon } from '@radix-ui/react-icons';
 
 import { Button, ButtonProps } from "@/components/ui/button";
 import {
@@ -19,9 +19,10 @@ type Props =
   ButtonProps
   & {
     whimUrl: string;
+    password: string | null;
   }
 
-export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
+export const CopyWhim = ( { whimUrl, variant = "ghost", password, ...props }: Props ) => {
   const [ isCopied, setIsCopied ] = useState( false );
   const handleCopy = async ( whim: string ) => {
     navigator.clipboard.writeText( whim );
@@ -57,10 +58,12 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.origin }/${ whimUrl }` );
-            toast( 'Whim copied with link style.', {
-              description: `${ location.origin }/${ whimUrl }`,
-              className: "bg-muted"
-            } );
+            toast( `${ password
+                       ? 'Protected whim'
+                       : 'Whim' } copied with clean style`, {
+                     description: `${ location.origin }/${ whimUrl }`,
+                     className: "bg-muted"
+                   } );
           } }
         >
           Link
@@ -73,10 +76,12 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.host }/${ whimUrl }` );
-            toast( 'Whim copied with clean style', {
-              description: `${ location.host }/${ whimUrl }`,
-              className: "bg-muted"
-            } );
+            toast( `${ password
+                       ? 'Protected whim'
+                       : 'Whim' } copied with clean style`, {
+                     description: `${ location.host }/${ whimUrl }`,
+                     className: "bg-muted"
+                   } );
           } }
         >
           Clean
@@ -85,6 +90,29 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", ...props }: Props ) => {
             : <SliderIcon className="ml-auto w-4 h-4" /> }
           <span className="sr-only">Clean copy</span>
         </DropdownMenuItem>
+        { password
+          ? (
+            <>
+              <DropdownMenuItem
+                onClick={ () => {
+                  setIsCopied( true );
+                  handleCopy( `${ location.host }/${ whimUrl }?pw=${ password }` );
+                  toast( 'Automatic whim copied', {
+                    description: `${ location.host }/${ whimUrl }?pw=${ password?.slice( 0, 6 )
+                                                                                .padEnd( 9, '.' ) }`,
+                    className: "bg-muted"
+                  } );
+                } }
+              >
+                Automatic
+                { isCopied
+                  ? <CheckCircledIcon className="ml-auto w-4 h-4" />
+                  : <DoubleArrowRightIcon className="ml-auto w-4 h-4" /> }
+                <span className="sr-only">Clean copy</span>
+              </DropdownMenuItem>
+            </>
+          )
+          : null }
       </DropdownMenuContent>
     </DropdownMenu>
   );

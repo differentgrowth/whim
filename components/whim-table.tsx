@@ -1,5 +1,8 @@
 import { compareAsc, format } from "date-fns";
 
+import { LockClosedIcon, LockOpen2Icon } from "@radix-ui/react-icons";
+
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CopyWhim } from '@/components/copy-whim';
 import { DeleteWhim } from '@/components/delete-whim';
@@ -39,6 +42,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
           <TableHead className="w-24 text-right">Counter</TableHead>
           <TableHead className="w-52 text-right">Created At</TableHead>
           <TableHead className="w-52 text-right">Expiration</TableHead>
+          <TableHead className="w-6" />
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -57,6 +61,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
               <CopyWhim
                 size="icon"
                 whimUrl={ whim.shorted_url }
+                password={ whim.password }
               />
             </TableCell>
             <TableCell className="w-24">{ whim.shorted_url }</TableCell>
@@ -74,6 +79,24 @@ export const WhimTable = async ( { customerId }: Props ) => {
               { whim.expiration
                 ? format( whim.expiration, "LLL dd, y" )
                 : '' }
+            </TableCell>
+            <TableCell className="w-6">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    { whim.password
+                      ? <LockClosedIcon className="w-4 h-4" />
+                      : <LockOpen2Icon className="w-4 h-4" /> }
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      { whim.password
+                        ? 'Protected'
+                        : 'Public' }
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </TableCell>
           </TableRow>
         ) ) }

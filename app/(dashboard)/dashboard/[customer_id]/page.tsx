@@ -1,15 +1,16 @@
 import { Suspense } from "react";
 
-import { ChevronRightIcon, ResetIcon } from '@radix-ui/react-icons';
+import { ChevronRightIcon, GearIcon, ResetIcon } from '@radix-ui/react-icons';
 
-import { WhimTable } from '@/components/whim-table';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { SubmitButton } from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CreateWhimForm } from '@/components/forms';
 import { DatePicker } from "@/components/date-picker";
+import { Input } from '@/components/ui/input';
+import { InputPassword } from "@/components/input-password";
+import { Label } from '@/components/ui/label';
+import { SubmitButton } from '@/components/submit-button';
+import { WhimTable } from '@/components/whim-table';
 
 type PageProps = {
   params: {
@@ -56,6 +57,13 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
               <Label htmlFor="expiration">Expiration Date (optional)</Label>
               <DatePicker />
             </div>
+            <div>
+              <Label htmlFor="password">Password (optional)</Label>
+              <InputPassword
+                name="password"
+                autocomplete="new-password"
+              />
+            </div>
           </CardContent>
 
           <CardFooter className="flex justify-end gap-1.5">
@@ -73,7 +81,7 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
         </Card>
       </CreateWhimForm>
 
-      <Suspense>
+      <Suspense fallback={ <GearIcon className="w-16 h-16 mx-auto animate-spin" /> }>
         <WhimTable customerId={ customer_id } />
       </Suspense>
     </main>

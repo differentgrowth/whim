@@ -1,14 +1,22 @@
-import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect, RedirectType } from 'next/navigation';
 
 import { compareAsc } from "date-fns";
 
 import { getWhim, increaseWhimCounter } from '@/lib/db';
+import { ProtectedWhimForm } from "@/components/forms";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { InputPassword } from "@/components/input-password";
+import { SubmitButton } from "@/components/submit-button";
+import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
 
 type PageProps = {
   params: {
     shorted_url: string;
   };
-  searchParams: {};
+  searchParams: {
+    pw?: string;
+  };
 }
 
 const getData = async ( shorted_url: string ) => {
@@ -25,29 +33,69 @@ const getData = async ( shorted_url: string ) => {
   } catch ( e ) {
     return {
       url: null,
-      expiration: null
+      expiration: null,
+      password: null
     };
   }
 };
 
-const Page = async ( { params: { shorted_url } }: PageProps ) => {
-  const { url, expiration } = await getData( shorted_url );
+const Page = async ( { params: { shorted_url }, searchParams: { pw } }: PageProps ) => {
+  const { url, expiration, password } = await getData( shorted_url );
 
   if ( !url ) {
     notFound();
   }
 
-  if ( !expiration ) {
-    permanentRedirect( url );
+  if ( password && pw && password === pw ) {
+    redirect( url, RedirectType.replace );
   }
 
-  if ( expiration && compareAsc( expiration, new Date() ) < 1 ) {
-    permanentRedirect( '/expired' );
+  if ( !password && !expiration ) {
+    permanentRedirect( url, RedirectType.replace );
   }
 
-  redirect( url );
+  if ( !password && expiration && compareAsc( expiration, new Date() ) < 1 ) {
+    permanentRedirect( '/expired', RedirectType.replace );
+  }
 
-  return null;
+  if ( !password ) {
+    redirect( url, RedirectType.replace );
+  }
+
+  return (
+    <main>
+      <ProtectedWhimForm className="container max-w-lg mt-16">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Protected Whim
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-2 flex flex-col space-y-3">
+            <input
+              type="hidden"
+              value={ shorted_url }
+              id="shorted_url"
+              name="shorted_url"
+            />
+            <Label htmlFor="password">Password</Label>
+            <InputPassword
+              name="password"
+              autocomplete="password"
+            />
+          </CardContent>
+          <CardFooter>
+            <SubmitButton
+              className="ml-auto"
+              icon={ <DoubleArrowRightIcon /> }
+            >
+              Enter
+            </SubmitButton>
+          </CardFooter>
+        </Card>
+      </ProtectedWhimForm>
+    </main>
+  );
 };
 
 export default Page;

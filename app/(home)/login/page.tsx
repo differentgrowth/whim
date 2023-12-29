@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/submit-button";
 import { AuthenticateForm } from "@/components/forms";
+import { InputPassword } from "@/components/input-password";
 
 type PageProps = {
   params: {};
@@ -43,7 +44,30 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                   Welcome to the quickest and easiest way to shorten your URLs.
                 </CardDescription>
               </CardHeader>
+              <CardContent className="mt-2 flex flex-col gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="me@email.com"
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="password">Password</Label>
+                  <InputPassword
+                    name="password"
+                    autocomplete="password"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-end">
+                <SubmitButton>Enter</SubmitButton>
+              </CardFooter>
             </TabsContent>
+
             <TabsContent value="signup">
               <CardHeader>
                 <CardTitle>Create your account</CardTitle>
@@ -51,37 +75,25 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                   Share your new urls in one-click.
                 </CardDescription>
               </CardHeader>
-            </TabsContent>
-
-            <CardContent className="mt-2 flex flex-col gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="me@email.com"
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="password"
-                  placeholder="***"
-                />
-              </div>
-            </CardContent>
-
-            <TabsContent value="login">
-              <CardFooter className="flex justify-end">
-                <SubmitButton>Enter</SubmitButton>
-              </CardFooter>
-            </TabsContent>
-            <TabsContent value="signup">
+              <CardContent className="mt-2 flex flex-col gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="me@email.com"
+                  />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="password">Password</Label>
+                  <InputPassword
+                    name="password"
+                    autocomplete="new-password"
+                  />
+                </div>
+              </CardContent>
               <CardFooter className="flex justify-end">
                 <SubmitButton>Register</SubmitButton>
               </CardFooter>

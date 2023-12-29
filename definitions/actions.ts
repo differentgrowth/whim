@@ -11,12 +11,6 @@ export type AnonymousInitialState =
 }
   | undefined
 
-export type SignUpInitialState =
-  | {
-  error: null | string;
-}
-  | undefined
-
 export type AuthenticateInitialState =
   | {
   error: null | string;
