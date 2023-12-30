@@ -51,7 +51,7 @@ export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
                 variant="default"
                 className="ml-1.5 rounded-sm grow-0"
                 whimUrl={ state.shorted_url }
-                password={ null }
+                secretKey={ null }
               />
             </div>
           )

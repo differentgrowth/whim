@@ -12,6 +12,7 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
+import { buttonVariants } from "@/components/ui/button";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -29,10 +30,10 @@ export const Navbar = () => {
         ? (
           <Link
             href="/"
-            className="flex flex-row justify-center items-center"
+            className={ buttonVariants( { variant: 'secondary' } ) }
           >
             <HomeIcon className="mr-1.5 w-4 h-4" />
-            <span className="hidden sm:inline text-sm font-medium">Whim</span>
+            <span className="text-sm font-medium">Whim</span>
           </Link>
         )
         : null }

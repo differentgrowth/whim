@@ -25,5 +25,6 @@ model Url {
   counter     Int       @default(0)
   expiration  DateTime?
   password    String?
+  secret_key  String?
   Customer    Customer? @relation(fields: [customer_id], references: [id], onDelete: Cascade)
 }

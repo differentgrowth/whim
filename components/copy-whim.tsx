@@ -19,10 +19,10 @@ type Props =
   ButtonProps
   & {
     whimUrl: string;
-    password: string | null;
+    secretKey: string | null;
   }
 
-export const CopyWhim = ( { whimUrl, variant = "ghost", password, ...props }: Props ) => {
+export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: Props ) => {
   const [ isCopied, setIsCopied ] = useState( false );
   const handleCopy = async ( whim: string ) => {
     navigator.clipboard.writeText( whim );
@@ -58,7 +58,7 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", password, ...props }: Pr
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.origin }/${ whimUrl }` );
-            toast( `${ password
+            toast( `${ secretKey
                        ? 'Protected whim'
                        : 'Whim' } copied with clean style`, {
                      description: `${ location.origin }/${ whimUrl }`,
@@ -76,7 +76,7 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", password, ...props }: Pr
           onClick={ () => {
             setIsCopied( true );
             handleCopy( `${ location.host }/${ whimUrl }` );
-            toast( `${ password
+            toast( `${ secretKey
                        ? 'Protected whim'
                        : 'Whim' } copied with clean style`, {
                      description: `${ location.host }/${ whimUrl }`,
@@ -90,16 +90,15 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", password, ...props }: Pr
             : <SliderIcon className="ml-auto w-4 h-4" /> }
           <span className="sr-only">Clean copy</span>
         </DropdownMenuItem>
-        { password
+        { secretKey
           ? (
             <>
               <DropdownMenuItem
                 onClick={ () => {
                   setIsCopied( true );
-                  handleCopy( `${ location.host }/${ whimUrl }?pw=${ password }` );
+                  handleCopy( `${ location.host }/${ whimUrl }?sk=${ secretKey }` );
                   toast( 'Automatic whim copied', {
-                    description: `${ location.host }/${ whimUrl }?pw=${ password?.slice( 0, 6 )
-                                                                                .padEnd( 9, '.' ) }`,
+                    description: `${ location.host }/${ whimUrl }?sk=${ secretKey }`,
                     className: "bg-muted"
                   } );
                 } }

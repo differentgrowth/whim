@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { createSecretKey, createShortedUrl } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 
@@ -34,11 +35,12 @@ export const createWhim = async ( { customerId, url, name, expiration, password 
       data: {
         name,
         url,
-        shorted_url: Math.random()
-                         .toString( 36 )
-                         .slice( 2, 8 ),
+        shorted_url: createShortedUrl(),
         expiration,
         password,
+        secret_key: password
+                    ? createSecretKey()
+                    : null,
         Customer: {
           connect: {
             id: customerId
@@ -56,9 +58,7 @@ export const createAnonymousWhim = async ( { url }: {
     {
       data: {
         url,
-        shorted_url: Math.random()
-                         .toString( 36 )
-                         .slice( 2, 8 )
+        shorted_url: createShortedUrl()
       }
     }
   );
@@ -73,7 +73,7 @@ export const getWhim = async ( { shorted_url }: {
       select: {
         url: true,
         expiration: true,
-        password: true
+        secret_key: true
       }
     }
   );

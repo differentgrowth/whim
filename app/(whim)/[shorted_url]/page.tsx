@@ -15,7 +15,7 @@ type PageProps = {
     shorted_url: string;
   };
   searchParams: {
-    pw?: string;
+    sk?: string;
   };
 }
 
@@ -34,31 +34,31 @@ const getData = async ( shorted_url: string ) => {
     return {
       url: null,
       expiration: null,
-      password: null
+      secret_key: null
     };
   }
 };
 
-const Page = async ( { params: { shorted_url }, searchParams: { pw } }: PageProps ) => {
-  const { url, expiration, password } = await getData( shorted_url );
+const Page = async ( { params: { shorted_url }, searchParams: { sk } }: PageProps ) => {
+  const { url, expiration, secret_key } = await getData( shorted_url );
 
   if ( !url ) {
     notFound();
   }
 
-  if ( password && pw && password === pw ) {
+  if ( secret_key && sk && secret_key === sk ) {
     redirect( url, RedirectType.replace );
   }
 
-  if ( !password && !expiration ) {
+  if ( !secret_key && !expiration ) {
     permanentRedirect( url, RedirectType.replace );
   }
 
-  if ( !password && expiration && compareAsc( expiration, new Date() ) < 1 ) {
+  if ( !secret_key && expiration && compareAsc( expiration, new Date() ) < 1 ) {
     permanentRedirect( '/expired', RedirectType.replace );
   }
 
-  if ( !password ) {
+  if ( !secret_key ) {
     redirect( url, RedirectType.replace );
   }
 

@@ -16,11 +16,17 @@ type Props = {
 const getData = async ( { customerId }: {
   customerId: string
 } ) => {
-  const whims = await getCustomerWhims( { customer_id: customerId } );
+  try {
+    const whims = await getCustomerWhims( { customer_id: customerId } );
 
-  return {
-    whims
-  };
+    return {
+      whims
+    };
+  } catch ( e ) {
+    return {
+      whims: []
+    };
+  }
 };
 
 export const WhimTable = async ( { customerId }: Props ) => {
@@ -61,7 +67,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
               <CopyWhim
                 size="icon"
                 whimUrl={ whim.shorted_url }
-                password={ whim.password }
+                secretKey={ whim.secret_key }
               />
             </TableCell>
             <TableCell className="w-24">{ whim.shorted_url }</TableCell>

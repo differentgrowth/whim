@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Link1Icon } from '@radix-ui/react-icons';
 
 import { Input } from '@/components/ui/input';
-import { Card, CardDescription, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/submit-button';
 import { buttonVariants } from '@/components/ui/button';
 import { CreateAnonymousWhimForm } from '@/components/forms';
@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 const Page = () => {
   return (
     <main>
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="w-full py-12 md:py-24">
         <div className="container grid items-center gap-4 px-4 md:px-6 text-center">
           <div className="space-y-3">
             <h1 className="text-4xl tracking-tighter">Welcome to whim.li</h1>
@@ -43,7 +43,7 @@ const Page = () => {
         </div>
       </section>
 
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="w-full py-12 md:py-24">
         <div className="container w-full max-w-2xl flex flex-col space-y-3">
           <CreateAnonymousWhimForm className="flex flex-row">
             <Input
@@ -62,27 +62,81 @@ const Page = () => {
         </div>
       </section>
 
-      <section className="w-full mx-auto max-w-7xl py-12 md:py-24 lg:py-32">
+      <section className="w-full mx-auto max-w-7xl py-12 md:py-24">
         <h2 className="font-bold tracking-tighter mb-8">Why choose whim.li?</h2>
+        <div
+          className={ cn(
+            "container grid grid-cols-1 justify-items-center gap-6",
+            "lg:grid-cols-3"
+          ) }
+        >
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Simplicity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Our interface is easy to use, making URL shortening a breeze.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-        <div className="container flex flex-row flex-wrap justify-center items-stretch gap-4 px-4 md:px-6">
-          <Card className="p-8 w-full max-w-md">
-            <CardTitle>Simplicity</CardTitle>
-            <CardDescription>
-              Our interface is easy to use, making URL shortening a breeze.
-            </CardDescription>
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Speed</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Get your shortened URL in milliseconds.
+              </CardDescription>
+            </CardContent>
           </Card>
-          <Card className="p-8 w-full max-w-md">
-            <CardTitle>Speed</CardTitle>
-            <CardDescription>
-              Get your shortened URL in seconds.
-            </CardDescription>
+
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Reliability</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                We ensure your URLs are available when you need them.
+              </CardDescription>
+            </CardContent>
           </Card>
-          <Card className="p-8 w-full max-w-md">
-            <CardTitle>Reliability</CardTitle>
-            <CardDescription>
-              We ensure your URLs are available when you need them.
-            </CardDescription>
+
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Password Guard</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Ensures secure access to your links with customizable password protection, providing an extra layer of
+                security.
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Expiry Scheduler</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Automate link validity with an expiration date feature, allowing links to become inactive after a
+                specified period.
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Usage Tracker</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Monitor link activity with a built-in usage counter, offering insights into how frequently your links
+                are accessed.
+              </CardDescription>
+            </CardContent>
           </Card>
         </div>
       </section>

@@ -21,7 +21,7 @@ type PageProps = {
 
 const Page = async ( { params: { customer_id } }: PageProps ) => {
   return (
-    <main>
+    <main className="space-y-6">
       <CreateWhimForm className="w-full max-w-lg mx-auto">
         <Card className="w-full">
           <CardHeader>

@@ -1,7 +1,15 @@
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+
 const Page = () => {
   return (
     <main className="pt-12 mb-0">
-      <h2 className="w-fit mx-auto">This Whim has expired</h2>
+      <Card className="max-w-lg mx-auto">
+        <CardHeader>
+          <CardTitle>
+            This Whim has expired
+          </CardTitle>
+        </CardHeader>
+      </Card>
     </main>
   );
 };
