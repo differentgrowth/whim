@@ -71,7 +71,7 @@ const Page = async ( { params: { shorted_url }, searchParams: { sk } }: PageProp
               Protected Whim
             </CardTitle>
           </CardHeader>
-          <CardContent className="mt-2 flex flex-col space-y-3">
+          <CardContent className="mt-3 flex flex-col space-y-3">
             <input
               type="hidden"
               value={ shorted_url }

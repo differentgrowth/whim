@@ -28,7 +28,7 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
             <CardTitle>Create your new Whim</CardTitle>
           </CardHeader>
 
-          <CardContent className="mt-2 flex flex-col gap-4">
+          <CardContent className="mt-3 flex flex-col gap-4">
             <input
               type="hidden"
               value={ customer_id }

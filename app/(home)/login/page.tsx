@@ -44,7 +44,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                   Welcome to the quickest and easiest way to shorten your URLs.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="mt-2 flex flex-col gap-4">
+              <CardContent className="mt-3 flex flex-col gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -75,7 +75,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                   Share your new urls in one-click.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="mt-2 flex flex-col gap-4">
+              <CardContent className="mt-3 flex flex-col gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input

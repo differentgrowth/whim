@@ -1,6 +1,23 @@
-import { Cross1Icon, TrashIcon } from '@radix-ui/react-icons';
+"use client";
+
+import { useState } from "react";
+
+import { TrashIcon } from '@radix-ui/react-icons';
 
 import { Button } from '@/components/ui/button';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { SubmitButton } from "@/components/submit-button";
+import { deleteWhimAction } from "@/app/actions";
 import {
   Dialog,
   DialogClose,
@@ -11,8 +28,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { SubmitButton } from "@/components/submit-button";
-import { deleteWhimAction } from "@/app/actions";
 
 type Props = {
   whimId: number;
@@ -20,9 +35,65 @@ type Props = {
 }
 
 export const DeleteWhim = ( { whimId, customerId }: Props ) => {
+  const [ open, setOpen ] = useState( false );
+  const isDesktop = useMediaQuery( "(min-width: 768px)" );
+
+  if ( isDesktop ) {
+    return (
+      <Dialog
+        open={ open }
+        onOpenChange={ setOpen }
+      >
+        <DialogTrigger asChild>
+          <Button
+            size="icon"
+            variant="ghost"
+          >
+            <TrashIcon className="w-4 h-4" />
+            <span className="sr-only">Remove Whim</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your whim from our servers.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6">
+            <form
+              action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
+              noValidate
+            >
+              <div className="ml-auto w-full max-w-md flex flex-row justify-end space-x-3">
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
+
+                <DialogClose asChild>
+                  <SubmitButton icon={ <TrashIcon /> }>
+                    Delete
+                  </SubmitButton>
+                </DialogClose>
+              </div>
+            </form>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Drawer
+      open={ open }
+      onOpenChange={ setOpen }
+    >
+      <DrawerTrigger asChild>
         <Button
           size="icon"
           variant="ghost"
@@ -30,36 +101,39 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
           <TrashIcon className="w-4 h-4" />
           <span className="sr-only">Remove Whim</span>
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-          <DialogDescription>
+      </DrawerTrigger>
+
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Are you sure absolutely sure?</DrawerTitle>
+          <DrawerDescription>
             This action cannot be undone. This will permanently delete your whim from our servers.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="mt-4">
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="outline"
-            >
-              Cancel
-              <Cross1Icon className="ml-1.5 w-4 h-4" />
-            </Button>
-          </DialogClose>
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
           <form
             action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
             noValidate
           >
-            <DialogClose asChild>
-              <SubmitButton icon={ <TrashIcon /> }>
-                Delete
-              </SubmitButton>
-            </DialogClose>
+            <div className="ml-auto w-full max-w-md flex flex-row justify-end space-x-3">
+              <DrawerClose>
+                <Button
+                  type="button"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
+
+              <DrawerClose asChild>
+                <SubmitButton icon={ <TrashIcon /> }>
+                  Delete
+                </SubmitButton>
+              </DrawerClose>
+            </div>
           </form>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };

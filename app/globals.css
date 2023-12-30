@@ -124,6 +124,6 @@
     }
 
     ul {
-        @apply my-6 list-none [&>li]:mt-2;
+        @apply my-6 list-none [&>li]:mt-3;
     }
 }

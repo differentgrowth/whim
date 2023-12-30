@@ -8,6 +8,7 @@ import { CopyWhim } from '@/components/copy-whim';
 import { DeleteWhim } from '@/components/delete-whim';
 import { getCustomerWhims } from '@/lib/db';
 import { cn } from '@/lib/utils';
+import { deleteWhimAction } from "@/app/actions";
 
 type Props = {
   customerId: string;
@@ -64,6 +65,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
                 whimId={ whim.id }
                 customerId={ customerId }
               />
+
               <CopyWhim
                 size="icon"
                 whimUrl={ whim.shorted_url }

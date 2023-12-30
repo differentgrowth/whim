@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const Error = ( {
                   error,
@@ -22,16 +23,17 @@ const Error = ( {
   }
 
   return (
-    <div>
+    <div className="mt-3 max-w-lg mx-auto space-y-6">
       <h2>Something went wrong!</h2>
-      <button
+      <Button
+        variant="outline"
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
         Try again
-      </button>
+      </Button>
     </div>
   );
 };

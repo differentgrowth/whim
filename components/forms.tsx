@@ -39,7 +39,7 @@ export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
       </form>
 
       { !!state?.error
-        ? <span className="mt-4 text-destructive">{ state.error }</span>
+        ? <span className="mt-6 text-destructive">{ state.error }</span>
         : !!state?.shorted_url
           ? (
             <div className="w-full max-w-2xl flex flex-row items-center">
@@ -83,7 +83,7 @@ export const CreateWhimForm = ( { className, children }: Props ) => {
         ? (
           <Card
             className={ cn(
-              'mt-4 p-4 w-full max-w-lg mx-auto',
+              'mt-6 p-4 w-full max-w-lg mx-auto',
               'border-destructive bg-destructive/10'
             ) }
           >
@@ -115,7 +115,7 @@ export const ProtectedWhimForm = ( { className, children }: Props ) => {
         ? (
           <Card
             className={ cn(
-              'mt-4 p-4 w-full max-w-lg mx-auto',
+              'mt-6 p-4 w-full max-w-lg mx-auto',
               'border-destructive bg-destructive/10'
             ) }
           >
@@ -147,7 +147,7 @@ export const AuthenticateForm = ( { className, children }: Props ) => {
         ? (
           <Card
             className={ cn(
-              'mt-4 p-4 w-full max-w-lg mx-auto',
+              'mt-6 p-4 w-full max-w-lg mx-auto',
               'border-destructive bg-destructive/10'
             ) }
           >
