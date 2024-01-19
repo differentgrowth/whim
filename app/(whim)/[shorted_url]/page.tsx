@@ -4,11 +4,12 @@ import { compareAsc } from "date-fns";
 import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
 
 import { getWhim, increaseWhimCounter } from '@/lib/db';
-import { ProtectedWhimForm } from "@/components/forms";
+import { ActionForm } from "@/components/forms";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { InputPassword } from "@/components/input-password";
 import { SubmitButton } from "@/components/submit-button";
+import { checkProtectedWhim } from "@/app/actions";
 
 type PageProps = {
   params: {
@@ -64,7 +65,12 @@ const Page = async ( { params: { shorted_url }, searchParams: { sk } }: PageProp
 
   return (
     <main>
-      <ProtectedWhimForm className="container mt-16 max-w-lg">
+      <ActionForm
+        action={ checkProtectedWhim }
+        className="container mt-16 max-w-lg"
+        noValidate
+        spellCheck={ false }
+      >
         <Card>
           <CardHeader>
             <CardTitle>
@@ -93,7 +99,7 @@ const Page = async ( { params: { shorted_url }, searchParams: { sk } }: PageProp
             </SubmitButton>
           </CardFooter>
         </Card>
-      </ProtectedWhimForm>
+      </ActionForm>
     </main>
   );
 };

@@ -28,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { ActionForm } from "@/components/forms";
 
 type Props = {
   whimId: number;
@@ -61,10 +62,20 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="mt-6">
-            <form
-              action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
+            <ActionForm
+              action={ deleteWhimAction }
               noValidate
             >
+              <input
+                type="hidden"
+                name="whimId"
+                value={ whimId }
+              />
+              <input
+                type="hidden"
+                name="customerId"
+                value={ customerId }
+              />
               <div className="ml-auto flex w-full max-w-md flex-row justify-end space-x-3">
                 <DialogClose asChild>
                   <Button
@@ -81,7 +92,7 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
                   </SubmitButton>
                 </DialogClose>
               </div>
-            </form>
+            </ActionForm>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -111,8 +122,8 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <form
-            action={ deleteWhimAction.bind( null, { whimId, customerId } ) }
+          <ActionForm
+            action={ deleteWhimAction }
             noValidate
           >
             <div className="ml-auto flex w-full max-w-md flex-row justify-end space-x-3">
@@ -131,7 +142,7 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
                 </SubmitButton>
               </DrawerClose>
             </div>
-          </form>
+          </ActionForm>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

@@ -20,10 +20,11 @@ type Props =
   & {
     whimUrl: string;
     secretKey: string | null;
+    align?: "center" | "end" | "start";
   }
 
-export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: Props ) => {
-  const [ isCopied, setIsCopied ] = useState( false );
+export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, align = "end", ...props }: Props ) => {
+  const [ isCopied, setIsCopied ] = useState( { link: false, clean: false, automatic: false } );
   const handleCopy = async ( whim: string ) => {
     navigator.clipboard.writeText( whim );
   };
@@ -34,7 +35,7 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: P
     }
 
     const timer = setTimeout( () => {
-      setIsCopied( false );
+      setIsCopied( { link: false, clean: false, automatic: false } );
     }, 3000 );
 
     return () => clearTimeout( timer );
@@ -54,23 +55,23 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: P
           <span className="sr-only">Copy Menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align={ align }>
         <DropdownMenuLabel>Copy Types</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={ () => {
-            setIsCopied( true );
+            setIsCopied( prev => ( { ...prev, link: true } ) );
             handleCopy( `${ location.origin }/${ whimUrl }` );
-            toast( `${ secretKey
-                       ? 'Protected whim'
-                       : 'Whim' } copied with clean style`, {
-                     description: `${ location.origin }/${ whimUrl }`,
-                     className: "bg-muted"
-                   } );
+            toast.info( `${ secretKey
+                            ? 'Protected whim'
+                            : 'Whim' } copied with link style`, {
+                          description: `${ location.origin }/${ whimUrl }`,
+                          className: "bg-muted"
+                        } );
           } }
         >
           Link
-          { isCopied
+          { isCopied.link
             ? <CheckCircledIcon
               className="ml-auto size-4"
               aria-hidden="true"
@@ -83,18 +84,18 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: P
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={ () => {
-            setIsCopied( true );
+            setIsCopied( prev => ( { ...prev, clean: true } ) );
             handleCopy( `${ location.host }/${ whimUrl }` );
-            toast( `${ secretKey
-                       ? 'Protected whim'
-                       : 'Whim' } copied with clean style`, {
-                     description: `${ location.host }/${ whimUrl }`,
-                     className: "bg-muted"
-                   } );
+            toast.info( `${ secretKey
+                            ? 'Protected whim'
+                            : 'Whim' } copied with clean style`, {
+                          description: `${ location.host }/${ whimUrl }`,
+                          className: "bg-muted"
+                        } );
           } }
         >
           Clean
-          { isCopied
+          { isCopied.clean
             ? <CheckCircledIcon
               className="ml-auto size-4"
               aria-hidden="true"
@@ -110,16 +111,16 @@ export const CopyWhim = ( { whimUrl, variant = "ghost", secretKey, ...props }: P
             <>
               <DropdownMenuItem
                 onClick={ () => {
-                  setIsCopied( true );
+                  setIsCopied( prev => ( { ...prev, automatic: true } ) );
                   handleCopy( `${ location.host }/${ whimUrl }?sk=${ secretKey }` );
-                  toast( 'Automatic whim copied', {
+                  toast.warning( 'Automatic whim copied', {
                     description: `${ location.host }/${ whimUrl }?sk=${ secretKey }`,
                     className: "bg-muted"
                   } );
                 } }
               >
                 Automatic
-                { isCopied
+                { isCopied.automatic
                   ? <CheckCircledIcon
                     className="ml-auto size-4"
                     aria-hidden="true"

@@ -1,160 +1,91 @@
 'use client';
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFormState } from 'react-dom';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { AnonymousInitialState } from '@/definitions/actions';
-import { Card, CardDescription } from '@/components/ui/card';
+import { toast } from "sonner";
+
+import { type AnonymousState, type State } from '@/definitions/actions';
 import { CopyWhim } from '@/components/copy-whim';
-import { authenticate, checkProtectedWhim, create, createAnonymous } from '@/app/actions';
-import { cn } from '@/lib/utils';
 
-type Props = {
-  className?: string;
-  children?: React.ReactNode;
-}
+type Props =
+  Omit<React.FormHTMLAttributes<HTMLFormElement>, 'action'>
+  & {
+    action: ( state: State | undefined, formData: FormData ) => Promise<State>;
+    children: React.ReactNode;
+  }
 
-const anonymousInitialState: AnonymousInitialState = {
-  error: null,
-  shorted_url: null
-};
-
-export const CreateAnonymousWhimForm = ( { className, children }: Props ) => {
-  const [ state, formAction ] = useFormState( createAnonymous, anonymousInitialState );
+export const ActionForm = ( { action, children, ...props }: Props ) => {
+  const { push } = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [ state, formAction ] = useFormState( action, undefined );
   const formRef = useRef<HTMLFormElement>( null );
 
-  return (
-    <>
-      <form
-        ref={ formRef }
-        action={ async ( formData ) => {
-          formAction( formData );
-          formRef.current?.reset();
-        } }
-        noValidate
-        spellCheck={ false }
-        className={ className }
-      >
-        { children }
-      </form>
+  useEffect( () => {
+    if ( state?.type !== 'success' ) return;
+    formRef.current?.reset();
+    searchParams.size && push( pathname );
 
-      { !!state?.error
-        ? <span className="text-destructive mt-6">{ state.error }</span>
-        : !!state?.shorted_url
-          ? (
-            <div className="flex w-full max-w-2xl flex-row items-center">
-              <p className="text-muted-foreground grow rounded-sm border px-3 py-1">
-                { `whim.li/${ state.shorted_url }` }
-              </p>
-              <CopyWhim
-                size="icon"
-                variant="default"
-                className="ml-1.5 grow-0 rounded-sm"
-                whimUrl={ state.shorted_url }
-                secretKey={ null }
-              />
-            </div>
-          )
-          : null }
-    </>
-  );
-};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ state, pathname ] );
 
-export const CreateWhimForm = ( { className, children }: Props ) => {
-  const [ state, formAction ] = useFormState( create, undefined );
-  const formRef = useRef<HTMLFormElement>( null );
-
-  return (
-    <>
-      <form
-        ref={ formRef }
-        action={ async ( formData ) => {
-          formAction( formData );
-          formRef.current?.reset();
-        } }
-        className={ className }
-        noValidate
-        spellCheck={ false }
-      >
-        { children }
-      </form>
-
-      { !!state?.error
-        ? (
-          <Card
-            className={ cn(
-              'mx-auto mt-6 w-full max-w-lg p-4',
-              'border-destructive bg-destructive/10'
-            ) }
-          >
-            <CardDescription className="text-destructive text-center">
-              { state.error }
-            </CardDescription>
-          </Card>
-        )
-        : null }
-    </>
-  );
-};
-
-export const ProtectedWhimForm = ( { className, children }: Props ) => {
-  const [ state, formAction ] = useFormState( checkProtectedWhim, undefined );
+  useEffect( () => {
+    if ( !state?.type ) return;
+    toast[ state.type ]( state?.message );
+  }, [ state ] );
 
   return (
     <>
       <form
         action={ formAction }
-        className={ className }
-        noValidate
-        spellCheck={ false }
+        ref={ formRef }
+        { ...props }
       >
         { children }
       </form>
-
-      { !!state?.error
-        ? (
-          <Card
-            className={ cn(
-              'mx-auto mt-6 w-full max-w-lg p-4',
-              'border-destructive bg-destructive/10'
-            ) }
-          >
-            <CardDescription className="text-destructive text-center">
-              { state.error }
-            </CardDescription>
-          </Card>
-        )
-        : null }
     </>
   );
 };
 
-export const AuthenticateForm = ( { className, children }: Props ) => {
-  const [ state, formAction ] = useFormState( authenticate, undefined );
+
+type AnonymousFormProps =
+  Omit<React.FormHTMLAttributes<HTMLFormElement>, 'action'>
+  & {
+    action: ( state: AnonymousState | undefined, formData: FormData ) => Promise<AnonymousState>;
+    children: React.ReactNode;
+  }
+
+export const CreateAnonymousWhimForm = ( { action, children, ...props }: AnonymousFormProps ) => {
+  const [ state, formAction ] = useFormState( action, undefined );
+
+  useEffect( () => {
+    if ( !state?.type ) return;
+    toast[ state.type ]( state?.message );
+  }, [ state ] );
 
   return (
     <>
-      <form
-        action={ formAction }
-        className={ className }
-        noValidate
-        spellCheck={ false }
-      >
+      <form action={ formAction } { ...props }>
         { children }
       </form>
 
-      { !!state?.error
+      { !!state?.shorted_url
         ? (
-          <Card
-            className={ cn(
-              'mx-auto mt-6 w-full max-w-lg p-4',
-              'border-destructive bg-destructive/10'
-            ) }
-          >
-            <CardDescription className="text-destructive text-center">
-              { state.error }
-            </CardDescription>
-          </Card>
+          <div className="flex w-full max-w-2xl flex-row items-center rounded-sm">
+            <span className="bg-card text-card-foreground h-9 grow rounded-sm border px-3 py-1 shadow">
+              { `whim.li/${ state.shorted_url }` }
+            </span>
+
+            <CopyWhim
+              size="icon"
+              variant="default"
+              className="ml-1.5 grow-0 rounded-sm"
+              whimUrl={ state.shorted_url }
+              secretKey={ null }
+            />
+          </div>
         )
         : null }
     </>

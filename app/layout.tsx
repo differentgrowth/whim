@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans';
 import { Toaster } from "@/components/ui/sonner";
 
 import './globals.css';
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 export const metadata: Metadata = {
   title: 'Whim',
@@ -41,7 +42,8 @@ const RootLayout = ( { children }: {
     >
     <body>
     { children }
-    <Toaster />
+    <Toaster richColors />
+    <TailwindIndicator />
     </body>
     </html>
   );

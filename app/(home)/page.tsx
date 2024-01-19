@@ -5,8 +5,9 @@ import { Link1Icon } from '@radix-ui/react-icons';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/submit-button';
-import { buttonVariants } from '@/components/ui/button';
 import { CreateAnonymousWhimForm } from '@/components/forms';
+import { buttonVariants } from '@/components/ui/button';
+import { createAnonymous } from "@/app/actions";
 import { cn } from '@/lib/utils';
 
 const Page = () => {
@@ -45,7 +46,12 @@ const Page = () => {
 
       <section className="w-full py-12 md:py-24">
         <div className="container flex w-full max-w-2xl flex-col space-y-3">
-          <CreateAnonymousWhimForm className="flex flex-row">
+          <CreateAnonymousWhimForm
+            action={ createAnonymous }
+            className="flex flex-row"
+            noValidate
+            spellCheck={ false }
+          >
             <Input
               className="w-full grow rounded-sm text-base font-light sm:text-sm"
               placeholder="Enter a long URL"

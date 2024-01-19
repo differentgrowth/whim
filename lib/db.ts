@@ -23,6 +23,12 @@ export const getCustomer = async ( { email }: {
   return prisma.customer.findUnique( { where: { email } } );
 };
 
+export const checkCustomerExists = async ( { email }: {
+  email: string
+} ) => {
+  return prisma.customer.findUnique( { where: { email }, select: { id: true } } );
+};
+
 export const createWhim = async ( { customerId, url, name, expiration, password }: {
   customerId: string;
   url: string;
@@ -86,7 +92,6 @@ export const getCustomerWhims = async ( { customer_id }: {
     {
       where: { customer_id },
       orderBy: [
-        { expiration: 'desc' },
         { created_at: 'desc' }
       ]
     }

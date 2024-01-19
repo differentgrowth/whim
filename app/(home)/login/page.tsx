@@ -3,8 +3,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/submit-button";
-import { AuthenticateForm } from "@/components/forms";
+import { ActionForm } from "@/components/forms";
 import { InputPassword } from "@/components/input-password";
+import { authenticate } from "@/app/actions";
 
 type PageProps = {
   params: {};
@@ -20,7 +21,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
         defaultValue={ value }
         className="w-full max-w-lg"
       >
-        <TabsList className="flex">
+        <TabsList className="mb-3 flex">
           <TabsTrigger
             value="login"
             className="grow"
@@ -35,7 +36,12 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
           </TabsTrigger>
         </TabsList>
 
-        <AuthenticateForm className="w-full max-w-lg">
+        <ActionForm
+          action={ authenticate }
+          className="w-full max-w-lg"
+          noValidate
+          spellCheck={ false }
+        >
           <Card className="w-full">
             <TabsContent value="login">
               <CardHeader>
@@ -45,6 +51,11 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="mt-3 flex flex-col gap-4">
+                <input
+                  type="hidden"
+                  name="type"
+                  value="login"
+                />
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -76,6 +87,11 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="mt-3 flex flex-col gap-4">
+                <input
+                  type="hidden"
+                  name="type"
+                  value="signup"
+                />
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -100,7 +116,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
             </TabsContent>
 
           </Card>
-        </AuthenticateForm>
+        </ActionForm>
       </Tabs>
     </main>
   );

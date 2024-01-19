@@ -7,22 +7,37 @@ import { z } from 'zod';
 import { compareAsc } from "date-fns";
 import { compare, hash } from "bcrypt";
 
-import { createAnonymousWhim, createWhim, deleteWhim, getWhimPassword } from '@/lib/db';
+import { checkCustomerExists, createAnonymousWhim, createWhim, deleteWhim, getWhimPassword } from '@/lib/db';
 import { signIn, signOut } from '@/auth';
-import { AnonymousInitialState, AuthenticateInitialState, CreateInitialState } from "@/definitions/actions";
+import { AnonymousState, type State } from "@/definitions/actions";
 
-export const authenticate = async ( _prevState: AuthenticateInitialState, formData: FormData ) => {
+export const authenticate = async ( _prevState: State | undefined, formData: FormData ) => {
   try {
-    const { email, password } = Object.fromEntries( formData.entries() );
+    const { email, password, type } = Object.fromEntries( formData.entries() ) as {
+      email: string;
+      password: string;
+      type: 'login' | 'signup'
+    };
+    if ( type === 'login' ) {
+      const data = await checkCustomerExists( { email } );
+      if ( !data ) {
+        return {
+          type: 'warning' as const,
+          message: 'This user doesn\'t exist'
+        };
+      }
+    }
     await signIn( 'credentials', { email, password, redirect: false } );
   } catch ( error: any ) {
     if ( error.type === 'CredentialsSignin' ) {
       return {
-        error: 'Invalid Credentials'
+        type: 'error' as const,
+        message: 'Invalid Credentials'
       };
     }
     throw error;
   }
+
   redirect( `/login`, RedirectType.replace );
 };
 
@@ -40,6 +55,7 @@ const createSchema = z.object(
   {
     customer_id: z.string(),
     url: z.string()
+          .trim()
           .url(),
     name: z.string()
            .nullable(),
@@ -61,22 +77,32 @@ const createSchema = z.object(
   }
 );
 
-export const create = async ( _prevState: CreateInitialState, formData: FormData ) => {
+export const create = async ( _prevState: State | undefined, formData: FormData ) => {
   const parsed = createSchema.safeParse( Object.fromEntries( formData.entries() ) as unknown as z.infer<typeof createSchema> );
 
   if ( !parsed.success ) {
-    if ( parsed.error.errors[ 0 ].message === 'invalid date' ) {
+    const errors = Object.keys( parsed.error.flatten().fieldErrors );
+    if ( errors.includes( 'url' ) ) {
       return {
-        error: 'Invalid date!'
+        type: 'error' as const,
+        message: 'Invalid URL!'
       };
     }
-    if ( parsed.error.errors[ 0 ].message === 'invalid password' ) {
+    if ( errors.includes( 'expiration' ) ) {
       return {
-        error: 'Invalid password! The minimum length is 6 characters.'
+        type: 'warning' as const,
+        message: 'Invalid date!'
+      };
+    }
+    if ( errors.includes( 'password' ) ) {
+      return {
+        type: 'warning' as const,
+        message: 'Invalid password! The minimum length is 6 characters.'
       };
     }
     return {
-      error: 'Invalid data!'
+      type: 'warning' as const,
+      message: 'Invalid data!'
     };
   }
 
@@ -93,13 +119,15 @@ export const create = async ( _prevState: CreateInitialState, formData: FormData
                       } );
   } catch ( e ) {
     return {
-      error: 'Oops! Something went wrong.'
+      type: 'error' as const,
+      message: 'Oops! Something went wrong.'
     };
   }
 
   revalidatePath( `/dashboard/${ parsed.data.customer_id }`, 'page' );
   return {
-    error: null
+    type: 'success' as const,
+    message: 'Whim created successfully'
   };
 };
 
@@ -111,12 +139,13 @@ const createAnonymousSchema = z.object(
   }
 );
 
-export const createAnonymous = async ( _prevState: AnonymousInitialState, formData: FormData ) => {
+export const createAnonymous = async ( _prevState: AnonymousState | undefined, formData: FormData ) => {
   const parsed = createAnonymousSchema.safeParse( Object.fromEntries( formData.entries() ) as z.infer<typeof createAnonymousSchema> );
 
   if ( !parsed.success ) {
     return {
-      error: 'Invalid url!',
+      type: 'error' as const,
+      message: 'Invalid url!',
       shorted_url: null
     };
   }
@@ -125,12 +154,14 @@ export const createAnonymous = async ( _prevState: AnonymousInitialState, formDa
     const { shorted_url } = await createAnonymousWhim( { url: parsed.data.url } );
 
     return {
-      error: null,
+      type: 'success' as const,
+      message: 'Whim created successfully',
       shorted_url
     };
   } catch ( e ) {
     return {
-      error: 'Oops! Something went wrong.',
+      type: 'error' as const,
+      message: 'Oops! Something went wrong.',
       shorted_url: null
     };
   }
@@ -145,15 +176,14 @@ const deleteSchema = z.object(
                  .uuid()
   }
 );
-export const deleteWhimAction = async ( formData: {
-  whimId: number;
-  customerId: string
-} ) => {
-  const parsed = deleteSchema.safeParse( formData as z.infer<typeof deleteSchema> );
+export const deleteWhimAction = async ( _prevState: State | undefined, formData: FormData ) => {
+  const data = { ...Object.fromEntries( formData.entries() ) };
+  const parsed = deleteSchema.safeParse( { ...data, whimId: +data.whimId } as unknown as z.infer<typeof deleteSchema> );
 
   if ( !parsed.success ) {
     return {
-      error: 'Invalid data!'
+      type: 'error' as const,
+      message: 'Invalid data!'
     };
   }
 
@@ -161,11 +191,16 @@ export const deleteWhimAction = async ( formData: {
     await deleteWhim( { whimId: parsed.data.whimId, customerId: parsed.data.customerId } );
   } catch ( e ) {
     return {
-      error: 'Something went wrong!'
+      type: 'error' as const,
+      message: 'Something went wrong!'
     };
   }
 
   revalidatePath( `/dashboard/${ parsed.data.customerId }` );
+  return {
+    type: 'success' as const,
+    message: 'Whim deleted successfully'
+  };
 };
 
 const checkPasswordSchema = z.object(
@@ -175,11 +210,12 @@ const checkPasswordSchema = z.object(
   }
 );
 
-export const checkProtectedWhim = async ( _prevState: CreateInitialState, formData: FormData ) => {
+export const checkProtectedWhim = async ( _prevState: State | undefined, formData: FormData ) => {
   const parsed = checkPasswordSchema.safeParse( Object.fromEntries( formData.entries() ) as z.infer<typeof checkPasswordSchema> );
   if ( !parsed.success ) {
     return {
-      error: 'Invalid data!'
+      type: 'error' as const,
+      message: 'Invalid data!'
     };
   }
 
@@ -189,7 +225,8 @@ export const checkProtectedWhim = async ( _prevState: CreateInitialState, formDa
 
     if ( !whim || !whim?.password || !whim.url ) {
       return {
-        error: 'Invalid whim!'
+        type: 'error' as const,
+        message: 'Invalid whim!'
       };
     }
 
@@ -197,12 +234,14 @@ export const checkProtectedWhim = async ( _prevState: CreateInitialState, formDa
     const passwordsMatch = await compare( parsed.data.password, whim.password );
     if ( !passwordsMatch ) {
       return {
-        error: 'Invalid password!'
+        type: 'error' as const,
+        message: 'Invalid password!'
       };
     }
   } catch ( e ) {
     return {
-      error: 'Something went wrong!'
+      type: 'error' as const,
+      message: 'Something went wrong!'
     };
   }
 

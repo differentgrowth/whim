@@ -48,7 +48,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
           <TableHead className="min-w-32 max-w-32 text-right">Counter</TableHead>
           <TableHead className="min-w-32 max-w-32 text-right">Created</TableHead>
           <TableHead className="min-w-32 max-w-32 text-right">Expiration</TableHead>
-          <TableHead className="w-6" />
+          <TableHead className="w-6 border-l" />
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -66,6 +66,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
               />
               <CopyWhim
                 size="icon"
+                align="start"
                 whimUrl={ whim.shorted_url }
                 secretKey={ whim.secret_key }
               />
@@ -75,7 +76,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
             <TableCell className="font-medium">{ whim.name }</TableCell>
             <TableCell className="w-max truncate">{ whim.url }</TableCell>
             <TableCell className="min-w-32 max-w-32 text-right">{ whim.counter }</TableCell>
-            <TableCell className="min-w-32 max-w-32 text-right">{ format( whim.created_at, "LLL dd, y" ) }</TableCell>
+            <TableCell className="min-w-32 max-w-32 text-right">{ format( whim.created_at, "LLL dd, y - HH:mm" ) }</TableCell>
             <TableCell
               className={ cn(
                 "w-52 text-right",
@@ -85,10 +86,10 @@ export const WhimTable = async ( { customerId }: Props ) => {
             >
               { whim.expiration
                 ? format( whim.expiration, "LLL dd, y" )
-                : '' }
+                : '-' }
             </TableCell>
 
-            <TableCell className="w-6">
+            <TableCell className="w-6 border-l">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>

@@ -8,7 +8,7 @@ export const DashboardNavbar = () => {
     <nav className="mt-1.5 flex flex-row flex-wrap items-center justify-end p-2">
       <form action={ signout }>
         <SubmitButton
-          variant="ghost"
+          variant="outline"
           icon={ <ExitIcon /> }
         >
           Sign Out
