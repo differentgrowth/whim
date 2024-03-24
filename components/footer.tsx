@@ -6,7 +6,7 @@ export const Footer = () => {
   return (
     <footer className="mt-34 border-t md:mt-36">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
-        <p className="text-muted-foreground mt-10 text-center">
+        <p className="mt-10 text-center text-muted-foreground">
           &copy; { new Date().getFullYear() } Different Growth.
         </p>
       </div>

@@ -35,7 +35,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
   return (
     <Table
       className={ cn(
-        'container mt-10 max-w-7xl'
+        'container mt-10 max-w-6xl'
       ) }
     >
       <TableCaption>My Whims</TableCaption>
@@ -44,7 +44,7 @@ export const WhimTable = async ( { customerId }: Props ) => {
           <TableHead className="w-[100px] border-r text-right">Actions</TableHead>
           <TableHead className="min-w-24 max-w-24">Whim</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead className="w-max">URL</TableHead>
+          <TableHead className="min-w-32 max-w-36">URL</TableHead>
           <TableHead className="min-w-32 max-w-32 text-right">Counter</TableHead>
           <TableHead className="min-w-32 max-w-32 text-right">Created</TableHead>
           <TableHead className="min-w-32 max-w-32 text-right">Expiration</TableHead>
@@ -74,7 +74,9 @@ export const WhimTable = async ( { customerId }: Props ) => {
 
             <TableCell className="min-w-24 max-w-24">{ whim.shorted_url }</TableCell>
             <TableCell className="font-medium">{ whim.name }</TableCell>
-            <TableCell className="w-max truncate">{ whim.url }</TableCell>
+            <TableCell className="min-w-32 max-w-36">{ whim.url.length > 40
+                                                    ? `${ whim.url.slice( 0, 40 ) }...`
+                                                    : whim.url }</TableCell>
             <TableCell className="min-w-32 max-w-32 text-right">{ whim.counter }</TableCell>
             <TableCell className="min-w-32 max-w-32 text-right">{ format( whim.created_at, "LLL dd, y - HH:mm" ) }</TableCell>
             <TableCell

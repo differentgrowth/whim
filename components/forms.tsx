@@ -74,7 +74,7 @@ export const CreateAnonymousWhimForm = ( { action, children, ...props }: Anonymo
       { !!state?.shorted_url
         ? (
           <div className="flex w-full max-w-2xl flex-row items-center rounded-sm">
-            <span className="bg-card text-card-foreground h-9 grow rounded-sm border px-3 py-1 shadow">
+            <span className="h-9 grow rounded-sm border bg-card px-3 py-1 text-card-foreground shadow">
               { `whim.li/${ state.shorted_url }` }
             </span>
 
