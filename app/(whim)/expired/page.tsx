@@ -5,9 +5,7 @@ const Page = () => {
     <main className="mb-0 pt-12">
       <Card className="mx-auto max-w-lg">
         <CardHeader>
-          <CardTitle>
-            This Whim has expired
-          </CardTitle>
+          <CardTitle>This Whim has expired</CardTitle>
         </CardHeader>
       </Card>
     </main>

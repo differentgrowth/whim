@@ -1,4 +1,4 @@
-import { GearIcon } from '@radix-ui/react-icons';
+import { GearIcon } from "@radix-ui/react-icons";
 
 const Loading = () => {
   return (

@@ -1,16 +1,27 @@
 import { Suspense } from "react";
 
-import { ChevronRightIcon, GearIcon } from '@radix-ui/react-icons';
+import { ChevronRightIcon, GearIcon } from "@radix-ui/react-icons";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ActionForm } from '@/components/forms';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ActionForm } from "@/components/forms";
 import { DatePicker } from "@/components/date-picker";
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/input";
 import { InputPassword } from "@/components/input-password";
-import { Label } from '@/components/ui/label';
-import { SubmitButton } from '@/components/submit-button';
-import { WhimTable } from '@/components/whim-table';
+import { Label } from "@/components/ui/label";
+import { SubmitButton } from "@/components/submit-button";
+import { WhimTable } from "@/components/whim-table";
 import { create } from "@/app/actions";
 
 type PageProps = {
@@ -18,25 +29,19 @@ type PageProps = {
     customer_id: string;
   };
   searchParams: {};
-}
+};
 
-const Page = async ( { params: { customer_id } }: PageProps ) => {
+const Page = async ({ params: { customer_id } }: PageProps) => {
   return (
     <main className="space-y-6">
-      <Accordion
-        type="single"
-        collapsible
-        className="container max-w-lg"
-      >
+      <Accordion type="single" collapsible className="container max-w-lg">
         <AccordionItem value="new-whim">
-          <AccordionTrigger>
-            New Whim
-          </AccordionTrigger>
+          <AccordionTrigger>New Whim</AccordionTrigger>
           <AccordionContent>
             <ActionForm
-              action={ create }
+              action={create}
               noValidate
-              spellCheck={ false }
+              spellCheck={false}
               className="mx-auto w-full max-w-lg"
             >
               <Card className="w-full">
@@ -47,7 +52,7 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
                 <CardContent className="mt-3 flex flex-col gap-4">
                   <input
                     type="hidden"
-                    value={ customer_id }
+                    value={customer_id}
                     id="customer_id"
                     name="customer_id"
                   />
@@ -70,7 +75,9 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="expiration">Expiration Date (optional)</Label>
+                    <Label htmlFor="expiration">
+                      Expiration Date (optional)
+                    </Label>
                     <DatePicker />
                   </div>
                   <div>
@@ -83,7 +90,7 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
                 </CardContent>
 
                 <CardFooter className="flex justify-end">
-                  <SubmitButton icon={ <ChevronRightIcon /> }>
+                  <SubmitButton icon={<ChevronRightIcon />}>
                     Create
                   </SubmitButton>
                 </CardFooter>
@@ -93,8 +100,10 @@ const Page = async ( { params: { customer_id } }: PageProps ) => {
         </AccordionItem>
       </Accordion>
 
-      <Suspense fallback={ <GearIcon className="mx-auto size-16 animate-spin" /> }>
-        <WhimTable customerId={ customer_id } />
+      <Suspense
+        fallback={<GearIcon className="mx-auto size-16 animate-spin" />}
+      >
+        <WhimTable customerId={customer_id} />
       </Suspense>
     </main>
   );

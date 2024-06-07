@@ -2,115 +2,130 @@ import { compareAsc, format } from "date-fns";
 
 import { LockClosedIcon, LockOpen2Icon } from "@radix-ui/react-icons";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CopyWhim } from '@/components/copy-whim';
-import { DeleteWhim } from '@/components/delete-whim';
-import { getCustomerWhims } from '@/lib/db';
-import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CopyWhim } from "@/components/copy-whim";
+import { DeleteWhim } from "@/components/delete-whim";
+import { getCustomerWhims } from "@/lib/db";
+import { cn } from "@/lib/utils";
 
 type Props = {
   customerId: string;
-}
+};
 
-const getData = async ( { customerId }: {
-  customerId: string
-} ) => {
+const getData = async ({ customerId }: { customerId: string }) => {
   try {
-    const whims = await getCustomerWhims( { customer_id: customerId } );
+    const whims = await getCustomerWhims({ customer_id: customerId });
 
     return {
-      whims
+      whims,
     };
-  } catch ( e ) {
+  } catch (e) {
     return {
-      whims: []
+      whims: [],
     };
   }
 };
 
-export const WhimTable = async ( { customerId }: Props ) => {
-  const { whims } = await getData( { customerId } );
+export const WhimTable = async ({ customerId }: Props) => {
+  const { whims } = await getData({ customerId });
 
   return (
-    <Table
-      className={ cn(
-        'container mt-10 max-w-6xl'
-      ) }
-    >
+    <Table className={cn("container mt-10 max-w-6xl")}>
       <TableCaption>My Whims</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px] border-r text-right">Actions</TableHead>
+          <TableHead className="w-[100px] border-r text-right">
+            Actions
+          </TableHead>
           <TableHead className="min-w-24 max-w-24">Whim</TableHead>
           <TableHead>Name</TableHead>
           <TableHead className="min-w-32 max-w-36">URL</TableHead>
-          <TableHead className="min-w-32 max-w-32 text-right">Counter</TableHead>
-          <TableHead className="min-w-32 max-w-32 text-right">Created</TableHead>
-          <TableHead className="min-w-32 max-w-32 text-right">Expiration</TableHead>
+          <TableHead className="min-w-32 max-w-32 text-right">
+            Counter
+          </TableHead>
+          <TableHead className="min-w-32 max-w-32 text-right">
+            Created
+          </TableHead>
+          <TableHead className="min-w-32 max-w-32 text-right">
+            Expiration
+          </TableHead>
           <TableHead className="w-6 border-l" />
         </TableRow>
       </TableHeader>
       <TableBody>
-        { whims.map( whim => (
-          <TableRow key={ whim.id }>
+        {whims.map((whim) => (
+          <TableRow key={whim.id}>
             <TableCell
-              className={ cn(
-                'border-r',
-                'flex flex-row items-center space-x-1.5'
-              ) }
+              className={cn(
+                "border-r",
+                "flex flex-row items-center space-x-1.5",
+              )}
             >
-              <DeleteWhim
-                whimId={ whim.id }
-                customerId={ customerId }
-              />
+              <DeleteWhim whimId={whim.id} customerId={customerId} />
               <CopyWhim
                 size="icon"
                 align="start"
-                whimUrl={ whim.shorted_url }
-                secretKey={ whim.secret_key }
+                whimUrl={whim.shorted_url}
+                secretKey={whim.secret_key}
               />
             </TableCell>
 
-            <TableCell className="min-w-24 max-w-24">{ whim.shorted_url }</TableCell>
-            <TableCell className="font-medium">{ whim.name }</TableCell>
-            <TableCell className="min-w-32 max-w-36">{ whim.url.length > 40
-                                                    ? `${ whim.url.slice( 0, 40 ) }...`
-                                                    : whim.url }</TableCell>
-            <TableCell className="min-w-32 max-w-32 text-right">{ whim.counter }</TableCell>
-            <TableCell className="min-w-32 max-w-32 text-right">{ format( whim.created_at, "LLL dd, y - HH:mm" ) }</TableCell>
+            <TableCell className="min-w-24 max-w-24">
+              {whim.shorted_url}
+            </TableCell>
+            <TableCell className="font-medium">{whim.name}</TableCell>
+            <TableCell className="min-w-32 max-w-36">
+              {whim.url.length > 40 ? `${whim.url.slice(0, 40)}...` : whim.url}
+            </TableCell>
+            <TableCell className="min-w-32 max-w-32 text-right">
+              {whim.counter}
+            </TableCell>
+            <TableCell className="min-w-32 max-w-32 text-right">
+              {format(whim.created_at, "LLL dd, y - HH:mm")}
+            </TableCell>
             <TableCell
-              className={ cn(
+              className={cn(
                 "w-52 text-right",
-                ( whim.expiration && compareAsc( whim.expiration, new Date() ) < 0 )
-                && 'line-through'
-              ) }
+                whim.expiration &&
+                  compareAsc(whim.expiration, new Date()) < 0 &&
+                  "line-through",
+              )}
             >
-              { whim.expiration
-                ? format( whim.expiration, "LLL dd, y" )
-                : '-' }
+              {whim.expiration ? format(whim.expiration, "LLL dd, y") : "-"}
             </TableCell>
 
             <TableCell className="w-6 border-l">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    { whim.password
-                      ? <LockClosedIcon className="size-4" />
-                      : <LockOpen2Icon className="size-4" /> }
+                    {whim.password ? (
+                      <LockClosedIcon className="size-4" />
+                    ) : (
+                      <LockOpen2Icon className="size-4" />
+                    )}
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>
-                      { whim.password
-                        ? 'Protected'
-                        : 'Public' }
-                    </p>
+                    <p>{whim.password ? "Protected" : "Public"}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </TableCell>
           </TableRow>
-        ) ) }
+        ))}
       </TableBody>
     </Table>
   );

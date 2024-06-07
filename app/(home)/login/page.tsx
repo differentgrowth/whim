@@ -1,5 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/submit-button";
@@ -11,36 +18,27 @@ type PageProps = {
   params: {};
   searchParams: {
     value?: string;
-  }
-}
+  };
+};
 
-const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
+const Page = async ({ searchParams: { value = "login" } }: PageProps) => {
   return (
     <main className="mt-12 flex justify-center">
-      <Tabs
-        defaultValue={ value }
-        className="w-full max-w-lg"
-      >
+      <Tabs defaultValue={value} className="w-full max-w-lg">
         <TabsList className="mb-3 flex">
-          <TabsTrigger
-            value="login"
-            className="grow"
-          >
+          <TabsTrigger value="login" className="grow">
             Log In
           </TabsTrigger>
-          <TabsTrigger
-            value="signup"
-            className="grow"
-          >
+          <TabsTrigger value="signup" className="grow">
             Sign Up
           </TabsTrigger>
         </TabsList>
 
         <ActionForm
-          action={ authenticate }
+          action={authenticate}
           className="w-full max-w-lg"
           noValidate
-          spellCheck={ false }
+          spellCheck={false}
         >
           <Card className="w-full">
             <TabsContent value="login">
@@ -51,11 +49,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="mt-3 flex flex-col gap-4">
-                <input
-                  type="hidden"
-                  name="type"
-                  value="login"
-                />
+                <input type="hidden" name="type" value="login" />
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -68,10 +62,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="password">Password</Label>
-                  <InputPassword
-                    name="password"
-                    autocomplete="password"
-                  />
+                  <InputPassword name="password" autocomplete="password" />
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end">
@@ -87,11 +78,7 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="mt-3 flex flex-col gap-4">
-                <input
-                  type="hidden"
-                  name="type"
-                  value="signup"
-                />
+                <input type="hidden" name="type" value="signup" />
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -114,7 +101,6 @@ const Page = async ( { searchParams: { value = 'login' } }: PageProps ) => {
                 <SubmitButton>Register</SubmitButton>
               </CardFooter>
             </TabsContent>
-
           </Card>
         </ActionForm>
       </Tabs>

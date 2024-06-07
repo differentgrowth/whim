@@ -1,38 +1,37 @@
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from "next/og";
 
 // Route segment config
-export const runtime = 'edge';
+export const runtime = "edge";
 
 // Image metadata
-export const alt = 'WHIM';
+export const alt = "WHIM";
 export const size = {
   width: 1200,
-  height: 630
+  height: 630,
 };
 
-export const contentType = 'image/png';
+export const contentType = "image/png";
 
 // Image generation
 const Image = async () => {
   const interSemiBold = fetch(
-    new URL( './Geist-SemiBold.otf', import.meta.url )
-  )
-    .then( ( res ) => res.arrayBuffer() );
+    new URL("./Geist-SemiBold.otf", import.meta.url),
+  ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
     (
       // ImageResponse JSX element
       <div
-        style={ {
+        style={{
           fontSize: 128,
-          background: '#fafaf9',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#0c0a09'
-        } }
+          background: "#fafaf9",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#0c0a09",
+        }}
       >
         WHIM
       </div>
@@ -44,13 +43,13 @@ const Image = async () => {
       ...size,
       fonts: [
         {
-          name: 'Inter',
+          name: "Inter",
           data: await interSemiBold,
-          style: 'normal',
-          weight: 400
-        }
-      ]
-    }
+          style: "normal",
+          weight: 400,
+        },
+      ],
+    },
   );
 };
 

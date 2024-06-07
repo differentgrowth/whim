@@ -1,24 +1,24 @@
-'use client'; // Error components must be Client Components
+"use client"; // Error components must be Client Components
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-const Error = ( {
-                  error,
-                  reset
-                }: {
+const Error = ({
+  error,
+  reset,
+}: {
   error: Error & {
-    digest?: string
-  }
-  reset: () => void
-} ) => {
-  useEffect( () => {
+    digest?: string;
+  };
+  reset: () => void;
+}) => {
+  useEffect(() => {
     // Log the error to an error reporting service
-    console.error( error );
-  }, [ error ] );
+    console.error(error);
+  }, [error]);
 
-  if ( process.env.NODE_ENV === 'production' ) {
+  if (process.env.NODE_ENV === "production") {
     notFound();
   }
 

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import { TrashIcon } from '@radix-ui/react-icons';
+import { TrashIcon } from "@radix-ui/react-icons";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -13,7 +13,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { SubmitButton } from "@/components/submit-button";
@@ -26,30 +26,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { ActionForm } from "@/components/forms";
 
 type Props = {
   whimId: number;
   customerId: string;
-}
+};
 
-export const DeleteWhim = ( { whimId, customerId }: Props ) => {
-  const [ open, setOpen ] = useState( false );
-  const isDesktop = useMediaQuery( "(min-width: 768px)" );
+export const DeleteWhim = ({ whimId, customerId }: Props) => {
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  if ( isDesktop ) {
+  if (isDesktop) {
     return (
-      <Dialog
-        open={ open }
-        onOpenChange={ setOpen }
-      >
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button
-            size="icon"
-            variant="ghost"
-          >
+          <Button size="icon" variant="ghost">
             <TrashIcon className="size-4" />
             <span className="sr-only">Remove Whim</span>
           </Button>
@@ -58,38 +52,23 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
           <DialogHeader>
             <DialogTitle>Are you sure absolutely sure?</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your whim from our servers.
+              This action cannot be undone. This will permanently delete your
+              whim from our servers.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="mt-6">
-            <ActionForm
-              action={ deleteWhimAction }
-              noValidate
-            >
-              <input
-                type="hidden"
-                name="whimId"
-                value={ whimId }
-              />
-              <input
-                type="hidden"
-                name="customerId"
-                value={ customerId }
-              />
+            <ActionForm action={deleteWhimAction} noValidate>
+              <input type="hidden" name="whimId" value={whimId} />
+              <input type="hidden" name="customerId" value={customerId} />
               <div className="ml-auto flex w-full max-w-md flex-row justify-end space-x-3">
                 <DialogClose asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                  >
+                  <Button type="button" variant="outline">
                     Cancel
                   </Button>
                 </DialogClose>
 
                 <DialogClose asChild>
-                  <SubmitButton icon={ <TrashIcon /> }>
-                    Delete
-                  </SubmitButton>
+                  <SubmitButton icon={<TrashIcon />}>Delete</SubmitButton>
                 </DialogClose>
               </div>
             </ActionForm>
@@ -100,15 +79,9 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
   }
 
   return (
-    <Drawer
-      open={ open }
-      onOpenChange={ setOpen }
-    >
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-        >
+        <Button size="icon" variant="ghost">
           <TrashIcon className="size-4" />
           <span className="sr-only">Remove Whim</span>
         </Button>
@@ -118,28 +91,21 @@ export const DeleteWhim = ( { whimId, customerId }: Props ) => {
         <DrawerHeader>
           <DrawerTitle>Are you sure absolutely sure?</DrawerTitle>
           <DrawerDescription>
-            This action cannot be undone. This will permanently delete your whim from our servers.
+            This action cannot be undone. This will permanently delete your whim
+            from our servers.
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <ActionForm
-            action={ deleteWhimAction }
-            noValidate
-          >
+          <ActionForm action={deleteWhimAction} noValidate>
             <div className="ml-auto flex w-full max-w-md flex-row justify-end space-x-3">
               <DrawerClose>
-                <Button
-                  type="button"
-                  variant="outline"
-                >
+                <Button type="button" variant="outline">
                   Cancel
                 </Button>
               </DrawerClose>
 
               <DrawerClose asChild>
-                <SubmitButton icon={ <TrashIcon /> }>
-                  Delete
-                </SubmitButton>
+                <SubmitButton icon={<TrashIcon />}>Delete</SubmitButton>
               </DrawerClose>
             </div>
           </ActionForm>

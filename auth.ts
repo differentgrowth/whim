@@ -1,63 +1,55 @@
-import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { z } from 'zod';
-import { compare, hash } from 'bcrypt';
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { z } from "zod";
+import { compare, hash } from "bcrypt";
 
-import { authConfig } from './auth.config';
-import { createCustomer, getCustomer } from '@/lib/db';
+import { authConfig } from "./auth.config";
+import { createCustomer, getCustomer } from "@/lib/db";
 
-export const {
-  auth,
-  signIn,
-  signOut
-} = NextAuth(
-  {
-    ...authConfig,
-    providers: [
-      Credentials(
-        {
-          async authorize( credentials ) {
-            const parsedCredentials = z
-              .object( {
-                         email: z.string()
-                                 .email(),
-                         password: z.string()
-                                    .min( 8 )
-                       } )
-              .safeParse( credentials );
+export const { auth, signIn, signOut } = NextAuth({
+  ...authConfig,
+  providers: [
+    Credentials({
+      async authorize(credentials) {
+        const parsedCredentials = z
+          .object({
+            email: z.string().email(),
+            password: z.string().min(8),
+          })
+          .safeParse(credentials);
 
-            if ( parsedCredentials.success ) {
-              const {
-                email,
-                password
-              } = parsedCredentials.data;
-              let customer = await getCustomer( { email } );
+        if (parsedCredentials.success) {
+          const { email, password } = parsedCredentials.data;
+          let customer = await getCustomer({ email });
 
-              if ( !customer ) {
-                const encryptPassword = await hash( password, 10 );
-                customer = await createCustomer( { email, password: encryptPassword } );
+          if (!customer) {
+            const encryptPassword = await hash(password, 10);
+            customer = await createCustomer({
+              email,
+              password: encryptPassword,
+            });
 
-                if ( !customer ) return null;
+            if (!customer) return null;
 
-                return {
-                  id: customer.id,
-                  name: customer.id,
-                  email: customer.email
-                };
-              }
-
-              const passwordsMatch = await compare( password, customer.password );
-              if ( passwordsMatch ) {
-                return {
-                  id: customer.id,
-                  name: customer.id,
-                  email: customer.email
-                };
-              }
-            }
-
-            return null;
+            return {
+              id: customer.id,
+              name: customer.id,
+              email: customer.email,
+            };
           }
-        } )
-    ]
-  } );
+
+          const passwordsMatch = await compare(password, customer.password);
+          if (passwordsMatch) {
+            return {
+              id: customer.id,
+              name: customer.id,
+              email: customer.email,
+            };
+          }
+        }
+
+        return null;
+      },
+    }),
+  ],
+});
