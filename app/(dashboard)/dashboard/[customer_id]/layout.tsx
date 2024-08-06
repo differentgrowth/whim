@@ -1,23 +1,23 @@
-import { DashboardNavbar } from "@/components/navbar-dashboard";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/footer"
+import { DashboardNavbar } from "@/components/navbar-dashboard"
 
 type LayoutProps = {
-  params: {
-    customer_id: string;
-  };
-  children: React.ReactNode;
-};
+	params: {
+		customer_id: string
+	}
+	children: React.ReactNode
+}
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 const Layout = ({ children }: LayoutProps) => {
-  return (
-    <>
-      <DashboardNavbar />
-      {children}
-      <Footer />
-    </>
-  );
-};
+	return (
+		<>
+			<DashboardNavbar />
+			{children}
+			<Footer />
+		</>
+	)
+}
 
-export default Layout;
+export default Layout

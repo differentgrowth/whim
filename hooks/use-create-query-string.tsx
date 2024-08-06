@@ -1,19 +1,19 @@
-import { useCallback } from "react";
-import { ReadonlyURLSearchParams } from "next/navigation";
+import type { ReadonlyURLSearchParams } from "next/navigation"
+import { useCallback } from "react"
 
 export const useCreateQueryString = (searchParams: ReadonlyURLSearchParams) => {
-  return useCallback(
-    (name: string, value?: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+	return useCallback(
+		(name: string, value?: string) => {
+			const params = new URLSearchParams(searchParams.toString())
 
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
+			if (value) {
+				params.set(name, value)
+			} else {
+				params.delete(name)
+			}
 
-      return params.toString();
-    },
-    [searchParams],
-  );
-};
+			return params.toString()
+		},
+		[searchParams]
+	)
+}

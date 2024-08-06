@@ -1,92 +1,91 @@
-"use client";
+"use client"
 
-import { useEffect, useRef } from "react";
-import { useFormState } from "react-dom";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useRef } from "react"
+import { useFormState } from "react-dom"
 
-import { toast } from "sonner";
+import { toast } from "sonner"
 
-import { type AnonymousState, type State } from "@/definitions/actions";
-import { CopyWhim } from "@/components/copy-whim";
+import { CopyWhim } from "@/components/copy-whim"
+import type { AnonymousState, State } from "@/definitions/actions"
 
 type Props = Omit<React.FormHTMLAttributes<HTMLFormElement>, "action"> & {
-  action: (state: State | undefined, formData: FormData) => Promise<State>;
-  children: React.ReactNode;
-};
+	action: (state: State | undefined, formData: FormData) => Promise<State>
+	children: React.ReactNode
+}
 
 export const ActionForm = ({ action, children, ...props }: Props) => {
-  const { push } = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [state, formAction] = useFormState(action, undefined);
-  const formRef = useRef<HTMLFormElement>(null);
+	const { push } = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+	const [state, formAction] = useFormState(action, undefined)
+	const formRef = useRef<HTMLFormElement>(null)
 
-  useEffect(() => {
-    if (state?.type !== "success") return;
-    formRef.current?.reset();
-    searchParams.size && push(pathname);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		if (state?.type !== "success") return
+		formRef.current?.reset()
+		searchParams.size && push(pathname)
+	}, [state, pathname])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, pathname]);
+	useEffect(() => {
+		if (!state?.type) return
+		toast[state.type](state?.message)
+	}, [state])
 
-  useEffect(() => {
-    if (!state?.type) return;
-    toast[state.type](state?.message);
-  }, [state]);
-
-  return (
-    <>
-      <form action={formAction} ref={formRef} {...props}>
-        {children}
-      </form>
-    </>
-  );
-};
+	return (
+		<>
+			<form action={formAction} ref={formRef} {...props}>
+				{children}
+			</form>
+		</>
+	)
+}
 
 type AnonymousFormProps = Omit<
-  React.FormHTMLAttributes<HTMLFormElement>,
-  "action"
+	React.FormHTMLAttributes<HTMLFormElement>,
+	"action"
 > & {
-  action: (
-    state: AnonymousState | undefined,
-    formData: FormData,
-  ) => Promise<AnonymousState>;
-  children: React.ReactNode;
-};
+	action: (
+		state: AnonymousState | undefined,
+		formData: FormData
+	) => Promise<AnonymousState>
+	children: React.ReactNode
+}
 
 export const CreateAnonymousWhimForm = ({
-  action,
-  children,
-  ...props
+	action,
+	children,
+	...props
 }: AnonymousFormProps) => {
-  const [state, formAction] = useFormState(action, undefined);
+	const [state, formAction] = useFormState(action, undefined)
 
-  useEffect(() => {
-    if (!state?.type) return;
-    toast[state.type](state?.message);
-  }, [state]);
+	useEffect(() => {
+		if (!state?.type) return
+		toast[state.type](state?.message)
+	}, [state])
 
-  return (
-    <>
-      <form action={formAction} {...props}>
-        {children}
-      </form>
+	return (
+		<>
+			<form action={formAction} {...props}>
+				{children}
+			</form>
 
-      {!!state?.shorted_url ? (
-        <div className="flex w-full max-w-2xl flex-row items-center rounded-sm">
-          <span className="h-9 grow rounded-sm border bg-card px-3 py-1 text-card-foreground shadow">
-            {`whim.li/${state.shorted_url}`}
-          </span>
+			{state?.shorted_url ? (
+				<div className="flex w-full max-w-2xl flex-row items-center rounded-sm">
+					<span className="h-9 grow rounded-sm border bg-card px-3 py-1 text-card-foreground shadow">
+						{`whim.li/${state.shorted_url}`}
+					</span>
 
-          <CopyWhim
-            size="icon"
-            variant="default"
-            className="ml-1.5 grow-0 rounded-sm"
-            whimUrl={state.shorted_url}
-            secretKey={null}
-          />
-        </div>
-      ) : null}
-    </>
-  );
-};
+					<CopyWhim
+						size="icon"
+						variant="default"
+						className="ml-1.5 grow-0 rounded-sm"
+						whimUrl={state.shorted_url}
+						secretKey={null}
+					/>
+				</div>
+			) : null}
+		</>
+	)
+}
