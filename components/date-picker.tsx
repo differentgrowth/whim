@@ -34,10 +34,9 @@ export const DatePicker = () => {
 				<PopoverTrigger asChild>
 					<Button
 						variant="outline"
-						className={cn(
-							"w-full items-center justify-start text-left font-normal",
-							!date && "text-muted-foreground"
-						)}
+						className={cn("w-full items-center justify-start text-left font-normal", {
+							"text-muted-foreground": !date
+						})}
 					>
 						<CalendarIcon className="mr-1.5 size-4" />
 						{date ? format(date, "PPP") : <span>Pick a date</span>}
@@ -51,7 +50,6 @@ export const DatePicker = () => {
 							const newParams = createQueryString("date", val?.toISOString())
 							push(`${pathname}?${newParams}`)
 						}}
-						initialFocus
 					/>
 				</PopoverContent>
 			</Popover>

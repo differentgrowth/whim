@@ -37,7 +37,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 		<html lang="en" className={GeistSans.className}>
 			<body>
 				{children}
-				<Toaster richColors closeButton />
+				<Toaster richColors closeButton position="top-right" />
 				<TailwindIndicator />
 			</body>
 		</html>

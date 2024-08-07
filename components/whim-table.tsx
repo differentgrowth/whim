@@ -4,6 +4,7 @@ import { LockClosedIcon, LockOpen2Icon } from "@radix-ui/react-icons"
 
 import { CopyWhim } from "@/components/copy-whim"
 import { DeleteWhim } from "@/components/delete-whim"
+import { Badge } from "@/components/ui/badge"
 import {
 	Table,
 	TableBody,
@@ -82,17 +83,19 @@ export const WhimTable = async ({ customerId }: Props) => {
 							{whim.counter}
 						</TableCell>
 						<TableCell className="min-w-32 max-w-32 text-right">
-							{format(whim.created_at, "LLL dd, y - HH:mm")}
+							<Badge variant="outline">
+								{format(whim.created_at, "LLL dd, y - HH:mm")}
+							</Badge>
 						</TableCell>
 						<TableCell
-							className={cn(
-								"w-52 text-right",
-								whim.expiration &&
-									compareAsc(whim.expiration, new Date()) < 0 &&
-									"line-through"
-							)}
+							className={cn("w-52 text-right", {
+								"line-through":
+									whim.expiration && compareAsc(whim.expiration, new Date()) < 0
+							})}
 						>
-							{whim.expiration ? format(whim.expiration, "LLL dd, y") : "-"}
+							<Badge variant="outline">
+								{whim.expiration ? format(whim.expiration, "LLL dd, y") : "-"}
+							</Badge>
 						</TableCell>
 
 						<TableCell className="w-6 border-l">

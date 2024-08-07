@@ -12,12 +12,12 @@ export const deleteWhimSchema = object({
 })
 
 export const createAnonymousSchema = object({
-	url: string().trim().url()
+	url: string().trim().url("invalid url format")
 })
 
 export const createSchema = object({
 	customer_id: string(),
-	url: string().trim().url(),
+	url: string().trim().url("invalid url format"),
 	name: string().nullable(),
 	expiration: string()
 		.transform((data) => (data === "" ? null : data))
