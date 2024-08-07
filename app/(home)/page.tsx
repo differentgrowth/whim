@@ -18,9 +18,9 @@ import { cn } from "@/lib/utils"
 
 const Page = () => {
 	return (
-		<main>
-			<section className="w-full py-12 md:py-24">
-				<div className="container grid items-center gap-4 px-4 text-center md:px-6">
+		<main className="mt-12 space-y-12 md:space-y-24">
+			<section className="container max-w-7xl">
+				<div className="grid items-center gap-4 text-balance text-center">
 					<div className="space-y-3">
 						<h1 className="text-4xl tracking-tighter">Welcome to whim.li</h1>
 						<p className={cn("mx-auto max-w-2xl", "text-muted-foreground")}>
@@ -41,8 +41,8 @@ const Page = () => {
 				</div>
 			</section>
 
-			<section className="w-full py-12 md:py-24">
-				<div className="container flex w-full max-w-2xl flex-col space-y-3">
+			<section className="container max-w-7xl">
+				<div className="mx-auto flex w-full max-w-2xl flex-col space-y-3">
 					<CreateAnonymousWhimForm
 						action={createAnonymous}
 						className="flex flex-row"
@@ -64,11 +64,11 @@ const Page = () => {
 				</div>
 			</section>
 
-			<section className="mx-auto w-full max-w-7xl py-12 md:py-24">
+			<section className="container max-w-7xl">
 				<h2 className="mb-8 font-bold tracking-tighter">Why choose whim.li?</h2>
 				<div
 					className={cn(
-						"container grid grid-cols-1 justify-items-center gap-6",
+						"grid grid-cols-1 justify-items-center gap-6",
 						"lg:grid-cols-3"
 					)}
 				>

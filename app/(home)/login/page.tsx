@@ -23,8 +23,8 @@ type PageProps = {
 
 const Page = async ({ searchParams: { value = "login" } }: PageProps) => {
 	return (
-		<main className="mt-12 flex justify-center">
-			<Tabs defaultValue={value} className="w-full max-w-lg">
+		<main className="mt-12 space-y-12 md:space-y-24">
+			<Tabs defaultValue={value} className="container max-w-lg">
 				<TabsList className="mb-3 flex">
 					<TabsTrigger value="login" className="grow">
 						Log In
@@ -36,7 +36,7 @@ const Page = async ({ searchParams: { value = "login" } }: PageProps) => {
 
 				<ActionForm
 					action={authenticate}
-					className="w-full max-w-lg"
+					className="w-full"
 					noValidate
 					spellCheck={false}
 				>

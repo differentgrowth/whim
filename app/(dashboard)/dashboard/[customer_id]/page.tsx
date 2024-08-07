@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { WhimTable } from "@/components/whim-table"
+import { Whims } from "@/components/whims"
 
 type PageProps = {
 	params: {
@@ -33,7 +33,7 @@ type PageProps = {
 
 const Page = async ({ params: { customer_id } }: PageProps) => {
 	return (
-		<main className="space-y-6">
+		<main className="mt-12 space-y-12 md:space-y-24">
 			<Accordion type="single" collapsible className="container max-w-lg">
 				<AccordionItem value="new-whim">
 					<AccordionTrigger>New Whim</AccordionTrigger>
@@ -83,9 +83,12 @@ const Page = async ({ params: { customer_id } }: PageProps) => {
 				</AccordionItem>
 			</Accordion>
 
-			<Suspense fallback={<GearIcon className="mx-auto size-16 animate-spin" />}>
-				<WhimTable customerId={customer_id} />
-			</Suspense>
+			<div className="container max-w-7xl">
+				<h2 className="mb-6 max-w-4xl">My Whims</h2>
+				<Suspense fallback={<GearIcon className="mx-auto size-16 animate-spin" />}>
+					<Whims customerId={customer_id} />
+				</Suspense>
+			</div>
 		</main>
 	)
 }

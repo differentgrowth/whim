@@ -1,21 +1,26 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss"
+
+const config = {
 	darkMode: ["class"],
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}"
+		"./pages/**/*.{ts,tsx,md,mdx}",
+		"./components/**/*.{ts,tsx,md,mdx}",
+		"./app/**/*.{ts,tsx,md,mdx}"
 	],
 	prefix: "",
 	theme: {
 		container: {
 			center: true,
-			padding: "2rem",
+			padding: "1.5rem",
 			screens: {
 				"2xl": "1400px"
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ["var(--font-geist-sans)"],
+				mono: ["var(--font-geist-mono)"]
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
@@ -56,6 +61,9 @@ module.exports = {
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)"
 			},
+			backgroundImage: {
+				"gradient-110": "linear-gradient(110deg, var(--tw-gradient-stops))"
+			},
 			keyframes: {
 				"accordion-down": {
 					from: { height: "0" },
@@ -73,4 +81,6 @@ module.exports = {
 		}
 	},
 	plugins: [require("tailwindcss-animate")]
-}
+} satisfies Config
+
+export default config

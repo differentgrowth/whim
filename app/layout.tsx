@@ -7,7 +7,10 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 import "./globals.css"
 
 export const metadata: Metadata = {
-	title: "Whim",
+	title: {
+		default: "Whim",
+		template: "%s | Whim"
+	},
 	description: "URL shortener made by Different Growth",
 	generator: "Next.js",
 	applicationName: "Next.js",
